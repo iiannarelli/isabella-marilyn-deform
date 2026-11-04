@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cantilever Beam Simulator</title>
+<style>
+:root{--bg:#eef1f4;--card:#fff;--tx:#14202b;--mu:#5c6b78;--bd:#cfd6dd;--ac:#1f5fbf;--bad:#c0392b;--ok:#1e7d4f;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f161d;--card:#18222c;--tx:#e6edf3;--mu:#97a6b4;--bd:#2c3a47;--ac:#6aa3ff;--bad:#ff7b6b;--ok:#5fd09a}}
+:root[data-theme="dark"]{--bg:#0f161d;--card:#18222c;--tx:#e6edf3;--mu:#97a6b4;--bd:#2c3a47;--ac:#6aa3ff;--bad:#ff7b6b;--ok:#5fd09a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.6rem;margin:0 0 4px;letter-spacing:-.01em}
+.sub{color:var(--mu);margin:0 0 18px;max-width:62ch}
+.layout{display:grid;grid-template-columns:260px 1fr;gap:16px}
+@media(max-width:760px){.layout{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px}
+label{display:block;font-size:.85rem;color:var(--mu);margin:10px 0 3px}
+label:first-child{margin-top:0}
+input,select{width:100%;padding:7px 9px;font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:6px}
+input:focus-visible,select:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
+input[type=range]{padding:0}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.chk{display:flex;align-items:center;gap:6px;margin-top:6px;font-size:.85rem;color:var(--mu)}
+.chk input{width:auto}
+svg{display:block;width:100%;height:auto}
+.beam-bg{fill:var(--card)}
+.und{stroke:var(--mu);stroke-dasharray:6 5;stroke-width:1.5;fill:none}
+.wall{fill:var(--mu)}
+.wallh{stroke:var(--card);stroke-width:2}
+.ar{stroke:var(--ac);stroke-width:2.5}
+.arh{fill:var(--ac)}
+.lbl{fill:var(--tx);font-size:14px}
+.lblm{fill:var(--mu);font-size:12px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px}
+.stat{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px 12px}
+.stat span{display:block;font-size:.8rem;color:var(--mu)}
+.stat b{font-size:1.2rem;font-variant-numeric:tabular-nums}
+.bad{color:var(--bad)}.ok{color:var(--ok)}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+@media(max-width:760px){.charts{grid-template-columns:1fr}}
+.fill{fill:var(--ac);fill-opacity:.18}.ln{stroke:var(--ac);stroke-width:2;fill:none}.ax{stroke:var(--bd);stroke-width:1}
+.eq{margin-top:16px;color:var(--mu);font-size:.9rem}
+.eq code{color:var(--tx);background:var(--bg);padding:1px 6px;border-radius:4px}
+.legend{height:8px;border-radius:4px;background:linear-gradient(90deg,hsl(210 80% 50%),hsl(105 80% 50%),hsl(0 80% 50%));margin-top:6px}
+.legend+div{display:flex;justify-content:space-between;font-size:.75rem;color:var(--mu)}
+</style>
+</head>
+<body>
+<main>
+<h1>Cantilever beam simulator</h1>
+<p class="sub">Change the load, geometry, or material and watch the beam deflect. Results use Euler–Bernoulli beam theory (small deflections, uniform rectangular section).</p>
+
+<div class="layout">
+  <div class="panel">
+    <label for="type">Load type</label>
+    <select id="type"><option value="point">Point load at free end</option><option value="udl">Uniformly distributed load</option></select>
+    <label for="P" id="Plabel">Tip load P (N)</label>
+    <input id="P" type="number" value="50" min="0" step="any">
+    <label for="L">Length L (m)</label>
+    <input id="L" type="number" value="1" min="0.01" step="any">
+    <div class="row">
+      <div><label for="b">Width b (mm)</label><input id="b" type="number" value="25" min="0.1" step="any"></div>
+      <div><label for="h">Height h (mm)</label><input id="h" type="number" value="10" min="0.1" step="any"></div>
+    </div>
+    <label for="mat">Material</label>
+    <select id="mat">
+      <option value="200,250">Steel (A36)</option>
+      <option value="69,275">Aluminum 6061‑T6</option>
+      <option value="100,200">Brass</option>
+      <option value="10,40">Pine wood</option>
+      <option value="3,70">Acrylic</option>
+      <option value="custom">Custom</option>
+    </select>
+    <div class="row">
+      <div><label for="E">E (GPa)</label><input id="E" type="number" value="200" min="0.1" step="any"></div>
+      <div><label for="Y">Yield (MPa)</label><input id="Y" type="number" value="250" min="1" step="any"></div>
+    </div>
+    <label for="ex">Deflection exaggeration: <span id="exv">1</span>×</label>
+    <input id="ex" type="range" min="1" max="500" value="1" disabled>
+    <div class="chk"><input id="auto" type="checkbox" checked><label for="auto" style="margin:0">Auto-scale the drawing</label></div>
+  </div>
+
+  <div class="panel">
+    <svg id="beam" viewBox="0 0 700 290" role="img" aria-label="Deflected cantilever beam"></svg>
+    <div class="legend"></div><div><span>Low bending moment</span><span>Peak at the wall</span></div>
+  </div>
+</div>
+
+<div class="stats" id="stats"></div>
+
+<div class="charts">
+  <div class="panel"><svg id="cv" viewBox="0 0 340 120" role="img" aria-label="Shear force diagram"></svg></div>
+  <div class="panel"><svg id="cm" viewBox="0 0 340 120" role="img" aria-label="Bending moment diagram"></svg></div>
+</div>
+
+<p class="eq" id="eq"></p>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const f=(x,d=4)=>{if(!isFinite(x))return '–';const a=Math.abs(x);if(a!==0&&(a<1e-3||a>=1e6))return x.toExponential(2);return String(+x.toPrecision(d))};
+const ids=['type','P','L','b','h','E','Y','ex','auto','mat'];
+
+function update(){
+  const type=$('type').value,L=+$('L').value,P=+$('P').value,b=+$('b').value/1e3,h=+$('h').value/1e3,E=+$('E').value*1e9,Y=+$('Y').value;
+  $('Plabel').textContent=type==='point'?'Tip load P (N)':'Distributed load w (N/m)';
+  if(!(L>0&&b>0&&h>0&&E>0&&P>=0&&Y>0)){$('stats').innerHTML='<div class="stat"><span>Check inputs</span><b class="bad">Enter positive values</b></div>';return}
+  const I=b*h**3/12,EI=E*I;
+  let v,V,M,delta,theta,Mmax,Vmax,eq;
+  if(type==='point'){
+    v=x=>P*x*x*(3*L-x)/(6*EI);V=x=>P;M=x=>P*(L-x);
+    delta=P*L**3/(3*EI);theta=P*L*L/(2*EI);Mmax=P*L;Vmax=P;
+    eq='Tip deflection <code>δ = PL³ / 3EI</code>, tip slope <code>θ = PL² / 2EI</code>, max moment <code>M = PL</code>, max stress <code>σ = M·(h/2) / I</code>.';
+  }else{
+    v=x=>P*x*x*(6*L*L-4*L*x+x*x)/(24*EI);V=x=>P*(L-x);M=x=>P*(L-x)**2/2;
+    delta=P*L**4/(8*EI);theta=P*L**3/(6*EI);Mmax=P*L*L/2;Vmax=P*L;
+    eq='Tip deflection <code>δ = wL⁴ / 8EI</code>, tip slope <code>θ = wL³ / 6EI</code>, max moment <code>M = wL² / 2</code>, max stress <code>σ = M·(h/2) / I</code>.';
+  }
+  const sigma=Mmax*(h/2)/I/1e6,fos=sigma>0?Y/sigma:Infinity;
+
+  let ex=+$('ex').value;
+  if($('auto').checked){ex=delta>0?Math.min(500,Math.max(1,0.25*L/delta)):1;$('ex').value=Math.round(ex);ex=Math.round(ex)}
+  $('ex').disabled=$('auto').checked;$('exv').textContent=ex;
+
+  // beam drawing
+  const x0=80,W=560,y0=110,sx=W/L,N=60;
+  const px=x=>x0+x*sx,py=x=>y0+v(x)*sx*ex;
+  let s=`<rect class="wall" x="${x0-14}" y="${y0-60}" width="14" height="120"/>`;
+  for(let k=0;k<6;k++)s+=`<line class="wallh" x1="${x0-14}" y1="${y0-50+k*20}" x2="${x0}" y2="${y0-38+k*20}"/>`;
+  s+=`<line class="und" x1="${x0}" y1="${y0}" x2="${x0+W}" y2="${y0}"/>`;
+  for(let i=0;i<N;i++){
+    const xa=L*i/N,xb=L*(i+1)/N,t=Mmax>0?M((xa+xb)/2)/Mmax:0;
+    s+=`<line x1="${px(xa)}" y1="${py(xa)}" x2="${px(xb)}" y2="${py(xb)}" stroke="hsl(${210-210*t} 80% 50%)" stroke-width="14"/>`;
+  }
+  const ar=(x,y1,y2)=>`<line class="ar" x1="${x}" y1="${y1}" x2="${x}" y2="${y2-7}"/><path class="arh" d="M${x-5} ${y2-9}L${x+5} ${y2-9}L${x} ${y2}Z"/>`;
+  const tipY=py(L);
+  if(type==='point'){
+    s+=ar(px(L),tipY-75,tipY-9)+`<text class="lbl" x="${px(L)-10}" y="${tipY-82}" text-anchor="end">P = ${f(P)} N</text>`;
+  }else{
+    let pts='';
+    for(let k=1;k<=9;k++){const x=L*k/9;s+=ar(px(x),py(x)-48,py(x)-9);pts+=`${px(x)},${py(x)-48} `}
+    s+=`<polyline points="${pts}" fill="none" stroke="var(--ac)" stroke-width="2.5"/><text class="lbl" x="${x0+8}" y="${y0-60}">w = ${f(P)} N/m</text>`;
+  }
+  s+=`<text class="lblm" x="${x0+W}" y="${y0+22}" text-anchor="end">undeformed</text>`;
+  s+=`<text class="lbl" x="${px(L)}" y="${Math.min(tipY+34,280)}" text-anchor="end">δ = ${f(delta*1e3)} mm</text>`;
+  s+=`<text class="lblm" x="${x0}" y="282">Drawing exaggerated ${ex}× so the bend is visible</text>`;
+  $('beam').innerHTML=s;
+
+  // stats
+  const st=[['Tip deflection δ',f(delta*1e3)+' mm'],['Tip slope θ',f(theta*180/Math.PI)+'° ('+f(theta)+' rad)'],['Max bending moment',f(Mmax)+' N·m'],['Max shear force',f(Vmax)+' N'],['Max bending stress σ',f(sigma)+' MPa'],['Factor of safety',isFinite(fos)?f(fos,3):'∞'],['Second moment I',f(I*1e12)+' mm⁴'],['Span / deflection',delta>0?'L / '+f(L/delta,3):'–']];
+  $('stats').innerHTML=st.map(([a,c],i)=>`<div class="stat"><span>${a}</span><b${i===5?` class="${fos<1?'bad':'ok'}"`:''}>${c}</b></div>`).join('')+(fos<1?'<div class="stat"><span>Warning</span><b class="bad">Stress exceeds yield</b></div>':'');
+
+  // diagrams
+  chart('cv',V,Vmax,'Shear force V(x)','N',L);
+  chart('cm',M,Mmax,'Bending moment M(x)','N·m',L);
+  $('eq').innerHTML=eq+' Here <code>I = bh³ / 12</code>.';
+}
+
+function chart(id,fn,mx,title,unit,L){
+  const X0=40,X1=330,B=95,H=70;let d=`M${X0} ${B}`;
+  for(let i=0;i<=40;i++){const x=L*i/40;d+=` L${X0+(X1-X0)*i/40} ${B-(mx>0?fn(x)/mx:0)*H}`}
+  $(id).innerHTML=`<line class="ax" x1="${X0}" y1="${B}" x2="${X1}" y2="${B}"/><line class="ax" x1="${X0}" y1="${B-H}" x2="${X0}" y2="${B}"/>`+
+  `<path class="fill" d="${d} L${X1} ${B} Z"/><path class="ln" d="${d}"/>`+
+  `<text class="lbl" x="${X0}" y="12" style="font-size:12px">${title}, peak ${f(mx)} ${unit}</text>`+
+  `<text class="lblm" x="${X0}" y="112">wall (x = 0)</text><text class="lblm" x="${X1}" y="112" text-anchor="end">free end (x = L)</text>`;
+}
+
+$('mat').addEventListener('change',()=>{const v=$('mat').value;if(v!=='custom'){const[e,y]=v.split(',');$('E').value=e;$('Y').value=y}update()});
+['E','Y'].forEach(i=>$(i).addEventListener('input',()=>{$('mat').value='custom'}));
+ids.forEach(i=>{$(i).addEventListener('input',update);$(i).addEventListener('change',update)});
+update();
+</script>
+</body>
+</html>
