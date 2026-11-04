@@ -3,175 +3,188 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Cantilever Beam Simulator</title>
+<title>Cantilever Bending Test – Lab 3 (B)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
 <style>
-:root{--bg:#eef1f4;--card:#fff;--tx:#14202b;--mu:#5c6b78;--bd:#cfd6dd;--ac:#1f5fbf;--bad:#c0392b;--ok:#1e7d4f;
+/* ===== COLOR SCHEME: change the hex codes here to recolor the whole page ===== */
+:root{--bg:#fff4f8;--card:#ffffff;--tx:#4a3558;--mu:#8a7597;--bd:#f3d5e4;--pink:#ff7eb6;--lav:#a78bfa;--mint:#34c4a0;--peach:#ff9f6b;
+--g1:#ffe0ee;--g2:#e8e0ff;--s1:#ff6fa8;--s2:#ff9f6b;--s3:#e0a800;--s4:#2fbf9b;--s5:#8f7cf5;--warn:#d6336c;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f161d;--card:#18222c;--tx:#e6edf3;--mu:#97a6b4;--bd:#2c3a47;--ac:#6aa3ff;--bad:#ff7b6b;--ok:#5fd09a}}
-:root[data-theme="dark"]{--bg:#0f161d;--card:#18222c;--tx:#e6edf3;--mu:#97a6b4;--bd:#2c3a47;--ac:#6aa3ff;--bad:#ff7b6b;--ok:#5fd09a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1e1426;--card:#2a1d36;--tx:#f5e9ff;--mu:#b9a6cc;--bd:#44325a;--pink:#ff8fc2;--lav:#b9a3ff;--mint:#6fe3c4;--peach:#ffb996;--g1:#4a2742;--g2:#33285a;--s1:#ff8fc2;--s2:#ffb27d;--s3:#ffd166;--s4:#6fe3c4;--s5:#b3a4ff;--warn:#ff8fb1}}
+:root[data-theme="dark"]{--bg:#1e1426;--card:#2a1d36;--tx:#f5e9ff;--mu:#b9a6cc;--bd:#44325a;--pink:#ff8fc2;--lav:#b9a3ff;--mint:#6fe3c4;--peach:#ffb996;--g1:#4a2742;--g2:#33285a;--s1:#ff8fc2;--s2:#ffb27d;--s3:#ffd166;--s4:#6fe3c4;--s5:#b3a4ff;--warn:#ff8fb1}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-main{max-width:1000px;margin:0 auto;padding:20px 16px 40px}
-h1{font-size:1.6rem;margin:0 0 4px;letter-spacing:-.01em}
-.sub{color:var(--mu);margin:0 0 18px;max-width:62ch}
-.layout{display:grid;grid-template-columns:260px 1fr;gap:16px}
-@media(max-width:760px){.layout{grid-template-columns:1fr}}
-.panel{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px}
-label{display:block;font-size:.85rem;color:var(--mu);margin:10px 0 3px}
-label:first-child{margin-top:0}
-input,select{width:100%;padding:7px 9px;font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:6px}
-input:focus-visible,select:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
-input[type=range]{padding:0}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.chk{display:flex;align-items:center;gap:6px;margin-top:6px;font-size:.85rem;color:var(--mu)}
-.chk input{width:auto}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 "Nunito","Trebuchet MS",system-ui,sans-serif}
+main,.wrap{max-width:1040px;margin:0 auto;padding:16px 14px 40px}
+h1{font-size:1.5rem;margin:0}h2{font-size:1rem;margin:0 0 8px}
+.hero{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;background:linear-gradient(120deg,var(--g1),var(--g2));border-radius:18px;padding:14px 18px}
+.hero p{margin:0;color:var(--mu);font-size:.9rem}
+button{font:inherit;font-weight:700;color:var(--tx);background:var(--card);border:2px solid var(--bd);border-radius:999px;padding:6px 14px;cursor:pointer}
+button:hover{border-color:var(--pink)}button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-offset:1px}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.card{background:var(--card);border:2px solid var(--bd);border-radius:18px;padding:14px}
+.grid{display:grid;grid-template-columns:260px 1fr;gap:14px;margin-top:14px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:780px){.grid,.grid2{grid-template-columns:1fr}}
+.const{color:var(--mu);font-size:.85rem;margin:10px 4px 0}
+label{display:block;font-weight:700;font-size:.85rem;color:var(--mu);margin:10px 0 3px}label:first-child{margin-top:0}
+input{width:100%;padding:8px 10px;font:inherit;color:var(--tx);background:var(--bg);border:2px solid var(--bd);border-radius:12px}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.chip{padding:2px 10px;font-size:.8rem}.chip.on{background:var(--pink);border-color:var(--pink);color:#fff}
+.hint{font-size:.78rem;color:var(--mu);margin:10px 0 0}
 svg{display:block;width:100%;height:auto}
-.beam-bg{fill:var(--card)}
-.und{stroke:var(--mu);stroke-dasharray:6 5;stroke-width:1.5;fill:none}
-.wall{fill:var(--mu)}
-.wallh{stroke:var(--card);stroke-width:2}
-.ar{stroke:var(--ac);stroke-width:2.5}
-.arh{fill:var(--ac)}
-.lbl{fill:var(--tx);font-size:14px}
-.lblm{fill:var(--mu);font-size:12px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px}
-.stat{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px 12px}
-.stat span{display:block;font-size:.8rem;color:var(--mu)}
-.stat b{font-size:1.2rem;font-variant-numeric:tabular-nums}
-.bad{color:var(--bad)}.ok{color:var(--ok)}
-.charts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
-@media(max-width:760px){.charts{grid-template-columns:1fr}}
-.fill{fill:var(--ac);fill-opacity:.18}.ln{stroke:var(--ac);stroke-width:2;fill:none}.ax{stroke:var(--bd);stroke-width:1}
-.eq{margin-top:16px;color:var(--mu);font-size:.9rem}
-.eq code{color:var(--tx);background:var(--bg);padding:1px 6px;border-radius:4px}
-.legend{height:8px;border-radius:4px;background:linear-gradient(90deg,hsl(210 80% 50%),hsl(105 80% 50%),hsl(0 80% 50%));margin-top:6px}
-.legend+div{display:flex;justify-content:space-between;font-size:.75rem;color:var(--mu)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:14px}
+.stat{background:var(--card);border:2px solid var(--bd);border-radius:16px;padding:8px 12px}.stat span{display:block;font-size:.75rem;color:var(--mu);font-weight:700}.stat b{font-size:1.05rem}
+.warn{color:var(--warn)}
+.gr{stroke:var(--bd);stroke-width:1}.ax{stroke:var(--mu);stroke-width:1.5}.tk{fill:var(--mu);font-size:10px}.al{fill:var(--tx);font-size:11px;font-weight:700}
+.leg{list-style:none;margin:6px 0 0;padding:0;font-size:.74rem}.leg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+table{border-collapse:collapse;width:100%;font-size:.82rem}th,td{padding:4px 7px;border-bottom:1px solid var(--bd);text-align:right}th{color:var(--mu);font-weight:700}th:first-child,td:first-child{text-align:left}
+.t{fill:var(--tx);font-size:12px}.tm{fill:var(--mu);font-size:11px}.tb{font-weight:800;font-size:13px}
+#reportWrap,#slideWrap{display:none}
+body[data-view=report] #app,body[data-view=slide] #app{display:none}
+body[data-view=report] #reportWrap,body[data-view=slide] #slideWrap{display:block}
+.paper{background:#fff;color:#2b2233;max-width:780px;margin:0 auto;padding:22px 26px;border-radius:6px;font-size:11px;line-height:1.35;--tx:#2b2233;--mu:#6d5c7a;--bd:#e6d3df;--card:#fff;--s1:#e0407f;--s2:#ee7a3a;--s3:#c79200;--s4:#14a07c;--s5:#6c55e0}
+.paper h1{font-size:17px}.paper h2{font-size:12px;margin:10px 0 3px;color:#b0246a}.paper table{font-size:10px}.paper p{margin:3px 0}
+.paper .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.paper .leg{font-size:8.5px}
+.paper [contenteditable]{border-bottom:1px dashed #bbb;min-width:60px;display:inline-block}
+.bar2{display:flex;justify-content:space-between;gap:8px;max-width:780px;margin:0 auto 10px}
+#slide{aspect-ratio:16/9;max-width:960px;margin:0 auto;background:#fff;border-radius:14px;padding:2.2% 3%;display:grid;grid-template-columns:1.15fr 1fr;grid-template-rows:auto 1fr auto;gap:8px 18px;color:#2b2233;--tx:#2b2233;--mu:#6d5c7a;--bd:#f3d5e4;--card:#fff;--s1:#e0407f;--s2:#ee7a3a;--s3:#c79200;--s4:#14a07c;--s5:#6c55e0;background-image:linear-gradient(120deg,#ffe9f3,#ece6ff)}
+#slide h1{grid-column:1/3;font-size:clamp(16px,2.8vw,28px)}#slide .leg{display:none}
+.big{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;grid-column:1/3}.big div{background:#fff;border-radius:14px;padding:6px 12px;text-align:center}.big b{display:block;font-size:clamp(14px,2.4vw,24px);color:#b0246a}.big span{font-size:clamp(9px,1.2vw,13px);color:#6d5c7a}
+@media print{
+:root{--bg:#fff!important;--card:#fff!important;--tx:#2b2233!important;--mu:#6d5c7a!important;--bd:#e6d3df!important}
+body{background:#fff!important}.noprint{display:none!important}main,.wrap{padding:0}
+.paper{box-shadow:none;padding:0;max-width:none}#slide{max-width:none;border-radius:0;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+#slideWrap{page:slide}@page slide{size:landscape;margin:.35in}@page{margin:.5in}
+}
 </style>
 </head>
-<body>
-<main>
-<h1>Cantilever beam simulator</h1>
-<p class="sub">Change the load, geometry, or material and watch the beam deflect. Results use Euler–Bernoulli beam theory (small deflections, uniform rectangular section).</p>
-
-<div class="layout">
-  <div class="panel">
-    <label for="type">Load type</label>
-    <select id="type"><option value="point">Point load at free end</option><option value="udl">Uniformly distributed load</option></select>
-    <label for="P" id="Plabel">Tip load P (N)</label>
-    <input id="P" type="number" value="50" min="0" step="any">
-    <label for="L">Length L (m)</label>
-    <input id="L" type="number" value="1" min="0.01" step="any">
-    <div class="row">
-      <div><label for="b">Width b (mm)</label><input id="b" type="number" value="25" min="0.1" step="any"></div>
-      <div><label for="h">Height h (mm)</label><input id="h" type="number" value="10" min="0.1" step="any"></div>
-    </div>
-    <label for="mat">Material</label>
-    <select id="mat">
-      <option value="200,250">Steel (A36)</option>
-      <option value="69,275">Aluminum 6061‑T6</option>
-      <option value="100,200">Brass</option>
-      <option value="10,40">Pine wood</option>
-      <option value="3,70">Acrylic</option>
-      <option value="custom">Custom</option>
-    </select>
-    <div class="row">
-      <div><label for="E">E (GPa)</label><input id="E" type="number" value="200" min="0.1" step="any"></div>
-      <div><label for="Y">Yield (MPa)</label><input id="Y" type="number" value="250" min="1" step="any"></div>
-    </div>
-    <label for="ex">Deflection exaggeration: <span id="exv">1</span>×</label>
-    <input id="ex" type="range" min="1" max="500" value="1" disabled>
-    <div class="chk"><input id="auto" type="checkbox" checked><label for="auto" style="margin:0">Auto-scale the drawing</label></div>
-  </div>
-
-  <div class="panel">
-    <svg id="beam" viewBox="0 0 700 290" role="img" aria-label="Deflected cantilever beam"></svg>
-    <div class="legend"></div><div><span>Low bending moment</span><span>Peak at the wall</span></div>
-  </div>
+<body data-view="app">
+<main id="app">
+<div class="hero"><div><h1>🎀 Cantilever Bending Test</h1><p>ME/CEE 2140 · Lab 3 (B) · SM1004 Beam Apparatus</p></div>
+<div class="btns noprint"><button id="bPrint">🖨️ Print</button><button id="bReport">📝 Student report</button><button id="bSlide">🎞️ Slide</button></div></div>
+<p class="const" id="const"></p>
+<div class="grid">
+<div class="card noprint-ctl">
+<label for="L">Working length ℓ (mm)</label><input id="L" type="number" value="600" min="50" max="700" step="any"><div class="chips" id="cL"></div>
+<label for="W">Free-end load W (N)</label><input id="W" type="number" value="10" min="0" max="60" step="any"><div class="chips" id="cW"></div>
+<p class="hint">Lab lengths and loads show your measured data. Any other value is calculated from the equations.</p>
 </div>
-
+<div class="card"><div id="bar"></div></div>
+</div>
 <div class="stats" id="stats"></div>
-
-<div class="charts">
-  <div class="panel"><svg id="cv" viewBox="0 0 340 120" role="img" aria-label="Shear force diagram"></svg></div>
-  <div class="panel"><svg id="cm" viewBox="0 0 340 120" role="img" aria-label="Bending moment diagram"></svg></div>
+<div class="grid2">
+<div class="card"><h2>Figure 1 – Deflection Z vs load W</h2><div id="f1"></div><ul class="leg" id="l1"></ul></div>
+<div class="card"><h2>Figure 2 – Deflection Z vs ℓ³ (W = 10 N)</h2><div id="f2"></div><ul class="leg" id="l2"></ul></div>
 </div>
-
-<p class="eq" id="eq"></p>
+<div class="card" style="margin-top:14px"><h2>Calculated parameters</h2><div id="tbl"></div></div>
 </main>
+<div id="reportWrap"><div class="wrap"><div class="bar2 noprint"><button class="back">← Back</button><button class="pr">🖨️ Print / Save as PDF</button></div><article class="paper" id="report"></article></div></div>
+<div id="slideWrap"><div class="wrap"><div class="bar2 noprint"><button class="back">← Back</button><button class="pr">🖨️ Print / Save as PDF</button></div><div id="slide"></div></div></div>
+
+<script>
+/* ---------- core: data from SM1004Data.xlsx + lab equations ---------- */
+const D={200:[0,.07,.15,.22,.28,.34],300:[0,.23,.47,.68,.91,1.13],400:[0,.55,1.11,1.64,2.21,2.73],500:[0,1.07,2.13,3.19,4.26,5.33],600:[0,1.83,3.63,5.45,7.28,9.09]};
+const WS=[0,2,4,6,8,10],LS=[200,300,400,500,600],B=19,T=6.35,EREF=210;
+const I=B/1000*(T/1000)**3/12; /* m^4, Eq.(1) */
+const reg=(x,y)=>{const n=x.length,mx=x.reduce((a,c)=>a+c)/n,my=y.reduce((a,c)=>a+c)/n;let a=0,b=0,c=0;for(let i=0;i<n;i++){a+=(x[i]-mx)**2;b+=(x[i]-mx)*(y[i]-my);c+=(y[i]-my)**2}const m=b/a;return{m,c:my-m*mx,r2:b*b/(a*c)}};
+const R={};LS.forEach(L=>{const r=reg(WS,D[L]);r.l3=(L/1000)**3;r.E=r.l3*1e9/(3*r.m*I*1e12);R[L]=r}); /* Eq.(4), MPa */
+const EM=LS.reduce((a,L)=>a+R[L].E,0)/LS.length;
+const Q=reg(LS.map(L=>R[L].l3),LS.map(L=>D[L][5]/1000));Q.E=10/(3*I*Q.m)/1e6; /* Eq.(6), MPa */
+const dev=E=>100*Math.abs(E/1000-EREF)/EREF,DM=dev(EM),DQ=dev(Q.E);
+const calc=(L,W)=>{if(D[L]){const i=WS.indexOf(W);if(i>=0)return{z:D[L][i],src:"Measured lab data"};return{z:Math.max(0,R[L].m*W+R[L].c),src:"Regression line of measured data"}}
+return{z:W*(L/1000)**3/(3*EM*1e6*I)*1000,src:"Equation (2) with mean E"}};
+const slopeFor=L=>R[L]?R[L].m:(L/1000)**3/(3*EM*1e6*I)*1000,Efor=L=>R[L]?R[L].E:EM;
+const f=(x,d=4)=>{if(!isFinite(x))return"–";const a=Math.abs(x);if(a!==0&&(a<1e-3||a>=1e6))return x.toExponential(2);return String(+x.toPrecision(d))};
+</script>
 <script>
 const $=id=>document.getElementById(id);
-const f=(x,d=4)=>{if(!isFinite(x))return '–';const a=Math.abs(x);if(a!==0&&(a<1e-3||a>=1e6))return x.toExponential(2);return String(+x.toPrecision(d))};
-const ids=['type','P','L','b','h','E','Y','ex','auto','mat'];
+const sg=(c,d=3)=>(c<0?" − ":" + ")+f(Math.abs(c),d);
+const cols=["var(--s1)","var(--s2)","var(--s3)","var(--s4)","var(--s5)"];
 
-function update(){
-  const type=$('type').value,L=+$('L').value,P=+$('P').value,b=+$('b').value/1e3,h=+$('h').value/1e3,E=+$('E').value*1e9,Y=+$('Y').value;
-  $('Plabel').textContent=type==='point'?'Tip load P (N)':'Distributed load w (N/m)';
-  if(!(L>0&&b>0&&h>0&&E>0&&P>=0&&Y>0)){$('stats').innerHTML='<div class="stat"><span>Check inputs</span><b class="bad">Enter positive values</b></div>';return}
-  const I=b*h**3/12,EI=E*I;
-  let v,V,M,delta,theta,Mmax,Vmax,eq;
-  if(type==='point'){
-    v=x=>P*x*x*(3*L-x)/(6*EI);V=x=>P;M=x=>P*(L-x);
-    delta=P*L**3/(3*EI);theta=P*L*L/(2*EI);Mmax=P*L;Vmax=P;
-    eq='Tip deflection <code>δ = PL³ / 3EI</code>, tip slope <code>θ = PL² / 2EI</code>, max moment <code>M = PL</code>, max stress <code>σ = M·(h/2) / I</code>.';
-  }else{
-    v=x=>P*x*x*(6*L*L-4*L*x+x*x)/(24*EI);V=x=>P*(L-x);M=x=>P*(L-x)**2/2;
-    delta=P*L**4/(8*EI);theta=P*L**3/(6*EI);Mmax=P*L*L/2;Vmax=P*L;
-    eq='Tip deflection <code>δ = wL⁴ / 8EI</code>, tip slope <code>θ = wL³ / 6EI</code>, max moment <code>M = wL² / 2</code>, max stress <code>σ = M·(h/2) / I</code>.';
-  }
-  const sigma=Mmax*(h/2)/I/1e6,fos=sigma>0?Y/sigma:Infinity;
+function bar(L,W,z){
+ const y0=200,xc=150,ps=520/700,Lp=Math.max(30,Math.min(L,700)*ps),rise=z>0?14+76*(1-Math.exp(-z/5)):0,k=z>0?Math.round(rise/(z*ps)):0;
+ const tx=xc+Lp,ty=y0-rise,end=tx>560?"end":"start",o=end==="end"?-14:14;
+ let s=`<svg viewBox="0 0 720 300" role="img" aria-label="Cantilever beam, deflected">`;
+ s+=`<text class="tm" x="12" y="18">Drawing auto-scaled${k?" (deflection shown about "+k+"× larger)":""}</text>`;
+ s+=`<path d="M90 ${y0}V${y0-85}M72 ${y0-85}H108" style="stroke:var(--mu);stroke-width:2;fill:none"/><text class="tm" x="90" y="${y0-93}" text-anchor="middle">string</text>`;
+ s+=`<line x1="${xc}" y1="${y0}" x2="${tx}" y2="${y0}" style="stroke:var(--mu);stroke-dasharray:5 5"/><line x1="90" y1="${y0}" x2="${xc}" y2="${y0}" style="stroke:var(--mu);stroke-width:9"/>`;
+ const N=40;for(let i=0;i<N;i++){const a=i/N,b=(i+1)/N,yy=x=>y0-rise*(3*x*x-x**3)/2,t=1-(a+b)/2;
+  s+=`<line x1="${xc+Lp*a}" y1="${yy(a)}" x2="${xc+Lp*b}" y2="${yy(b)}" stroke="hsl(${170+160*t} 80% 68%)" stroke-width="9"/>`}
+ s+=`<rect x="${xc-12}" y="${y0-24}" width="24" height="48" rx="5" style="fill:var(--mu)"/><rect x="${xc-5}" y="${y0+24}" width="10" height="38" style="fill:var(--mu)"/><text class="tm" x="${xc}" y="${y0+78}" text-anchor="middle">clamp</text>`;
+ s+=`<rect x="${tx-11}" y="48" width="22" height="40" rx="6" style="fill:var(--lav)"/><circle cx="${tx}" cy="66" r="7" style="fill:var(--card)"/><line x1="${tx}" y1="88" x2="${tx}" y2="${ty-5}" style="stroke:var(--lav);stroke-width:2"/>`;
+ s+=`<text class="t tb" x="${tx+o}" y="62" text-anchor="${end}">z = ${f(z,3)} mm</text><text class="tm" x="${tx+o}" y="78" text-anchor="${end}">dial indicator</text>`;
+ s+=`<line x1="${tx}" y1="${ty+58}" x2="${tx}" y2="${ty+12}" style="stroke:var(--pink);stroke-width:3"/><path d="M${tx-7} ${ty+18}L${tx+7} ${ty+18}L${tx} ${ty+6}Z" style="fill:var(--pink)"/><rect x="${tx-14}" y="${ty+58}" width="28" height="13" rx="4" style="fill:var(--pink)"/>`;
+ s+=`<text class="t tb" x="${tx+o}" y="${ty+42}" text-anchor="${end}">W = ${f(W,3)} N</text>`;
+ s+=`<path d="M${xc} 280V290M${tx} 280V290M${xc} 285H${tx}" style="stroke:var(--mu);fill:none"/><text class="t" x="${(xc+tx)/2}" y="279" text-anchor="middle">ℓ = ${f(L,4)} mm</text></svg>`;
+ return s}
 
-  let ex=+$('ex').value;
-  if($('auto').checked){ex=delta>0?Math.min(500,Math.max(1,0.25*L/delta)):1;$('ex').value=Math.round(ex);ex=Math.round(ex)}
-  $('ex').disabled=$('auto').checked;$('exv').textContent=ex;
+function chart(o){const w=380,h=270,l=54,r=14,t=12,b=44,pw=w-l-r,ph=h-t-b,X=v=>l+v/o.xm*pw,Y=v=>t+ph-v/o.ym*ph;
+ let s=`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${o.al}">`;
+ for(let i=0;i<=5;i++){const a=o.xm*i/5,c=o.ym*i/5;s+=`<line class="gr" x1="${X(a)}" y1="${t}" x2="${X(a)}" y2="${t+ph}"/><line class="gr" x1="${l}" y1="${Y(c)}" x2="${l+pw}" y2="${Y(c)}"/><text class="tk" x="${X(a)}" y="${t+ph+14}" text-anchor="middle">${o.xf(a)}</text><text class="tk" x="${l-6}" y="${Y(c)+4}" text-anchor="end">${o.yf(c)}</text>`}
+ s+=`<line class="ax" x1="${l}" y1="${t+ph}" x2="${l+pw}" y2="${t+ph}"/><line class="ax" x1="${l}" y1="${t}" x2="${l}" y2="${t+ph}"/>`;
+ o.series.forEach((se,i)=>{let x2=o.xm,y2=se.c+se.m*x2;if(y2>o.ym){x2=(o.ym-se.c)/se.m;y2=o.ym}
+  s+=`<line x1="${X(0)}" y1="${Y(se.c)}" x2="${X(x2)}" y2="${Y(y2)}" style="stroke:${cols[i]};stroke-width:1.8"/>`;
+  se.pts.forEach(p=>s+=`<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="3.6" style="fill:${cols[i]}"/>`)});
+ if(o.hi&&o.hi[0]<=o.xm&&o.hi[1]<=o.ym)s+=`<circle cx="${X(o.hi[0])}" cy="${Y(o.hi[1])}" r="8" style="fill:none;stroke:var(--tx);stroke-width:2"/>`;
+ s+=`<text class="al" x="${l+pw/2}" y="${h-6}" text-anchor="middle">${o.xl}</text><text class="al" transform="translate(13 ${t+ph/2}) rotate(-90)" text-anchor="middle">${o.yl}</text></svg>`;return s}
 
-  // beam drawing
-  const x0=80,W=560,y0=110,sx=W/L,N=60;
-  const px=x=>x0+x*sx,py=x=>y0+v(x)*sx*ex;
-  let s=`<rect class="wall" x="${x0-14}" y="${y0-60}" width="14" height="120"/>`;
-  for(let k=0;k<6;k++)s+=`<line class="wallh" x1="${x0-14}" y1="${y0-50+k*20}" x2="${x0}" y2="${y0-38+k*20}"/>`;
-  s+=`<line class="und" x1="${x0}" y1="${y0}" x2="${x0+W}" y2="${y0}"/>`;
-  for(let i=0;i<N;i++){
-    const xa=L*i/N,xb=L*(i+1)/N,t=Mmax>0?M((xa+xb)/2)/Mmax:0;
-    s+=`<line x1="${px(xa)}" y1="${py(xa)}" x2="${px(xb)}" y2="${py(xb)}" stroke="hsl(${210-210*t} 80% 50%)" stroke-width="14"/>`;
-  }
-  const ar=(x,y1,y2)=>`<line class="ar" x1="${x}" y1="${y1}" x2="${x}" y2="${y2-7}"/><path class="arh" d="M${x-5} ${y2-9}L${x+5} ${y2-9}L${x} ${y2}Z"/>`;
-  const tipY=py(L);
-  if(type==='point'){
-    s+=ar(px(L),tipY-75,tipY-9)+`<text class="lbl" x="${px(L)-10}" y="${tipY-82}" text-anchor="end">P = ${f(P)} N</text>`;
-  }else{
-    let pts='';
-    for(let k=1;k<=9;k++){const x=L*k/9;s+=ar(px(x),py(x)-48,py(x)-9);pts+=`${px(x)},${py(x)-48} `}
-    s+=`<polyline points="${pts}" fill="none" stroke="var(--ac)" stroke-width="2.5"/><text class="lbl" x="${x0+8}" y="${y0-60}">w = ${f(P)} N/m</text>`;
-  }
-  s+=`<text class="lblm" x="${x0+W}" y="${y0+22}" text-anchor="end">undeformed</text>`;
-  s+=`<text class="lbl" x="${px(L)}" y="${Math.min(tipY+34,280)}" text-anchor="end">δ = ${f(delta*1e3)} mm</text>`;
-  s+=`<text class="lblm" x="${x0}" y="282">Drawing exaggerated ${ex}× so the bend is visible</text>`;
-  $('beam').innerHTML=s;
+const fig1=hi=>chart({xm:10,ym:10,al:"Deflection versus load",xl:"Load W [N]",yl:"Deflection Z [mm]",xf:v=>v,yf:v=>v,hi,series:LS.map(L=>({pts:WS.map((w,i)=>[w,D[L][i]]),m:R[L].m,c:R[L].c}))});
+const fig2=()=>chart({xm:.25,ym:.01,al:"Deflection versus l cubed",xl:"ℓ³ [m³]",yl:"Deflection Z [m]",xf:v=>v.toFixed(2),yf:v=>v.toFixed(3),series:[{pts:LS.map(L=>[R[L].l3,D[L][5]/1000]),m:Q.m,c:Q.c}]});
+const leg1=()=>LS.map((L,i)=>`<li><i style="background:${cols[i]}"></i>ℓ = ${L} mm: z = ${f(R[L].m,4)}·W${sg(R[L].c)}, R² = ${f(R[L].r2,5)}</li>`).join("");
+const leg2=()=>`<li><i style="background:${cols[0]}"></i>z = ${f(Q.m,4)}·ℓ³${sg(Q.c,2)}, R² = ${f(Q.r2,5)}</li>`;
 
-  // stats
-  const st=[['Tip deflection δ',f(delta*1e3)+' mm'],['Tip slope θ',f(theta*180/Math.PI)+'° ('+f(theta)+' rad)'],['Max bending moment',f(Mmax)+' N·m'],['Max shear force',f(Vmax)+' N'],['Max bending stress σ',f(sigma)+' MPa'],['Factor of safety',isFinite(fos)?f(fos,3):'∞'],['Second moment I',f(I*1e12)+' mm⁴'],['Span / deflection',delta>0?'L / '+f(L/delta,3):'–']];
-  $('stats').innerHTML=st.map(([a,c],i)=>`<div class="stat"><span>${a}</span><b${i===5?` class="${fos<1?'bad':'ok'}"`:''}>${c}</b></div>`).join('')+(fos<1?'<div class="stat"><span>Warning</span><b class="bad">Stress exceeds yield</b></div>':'');
+const tbl=()=>`<table><tr><th>ℓ (mm)</th><th>ℓ³ (m³)</th><th>Slope m (mm/N)</th><th>Intercept (mm)</th><th>R²</th><th>E (MPa)</th></tr>`+LS.map(L=>`<tr><td>${L}</td><td>${f(R[L].l3,4)}</td><td>${f(R[L].m,5)}</td><td>${f(R[L].c,3)}</td><td>${f(R[L].r2,5)}</td><td>${f(R[L].E,6)}</td></tr>`).join("")+
+`<tr><td colspan="5"><b>Average E (Figure 1 slopes)</b></td><td><b>${f(EM,6)}</b></td></tr></table>
+<p style="font-size:.85em;margin:8px 0 0">Fixed load W = 10 N: I = ${f(I,4)} m⁴, slope q = ${f(Q.m,4)} 1/m², E = <b>${f(Q.E,6)} MPa</b>.<br>
+E<sub>ref</sub> = ${EREF} GPa (actual range 190–210 GPa). Deviation of mean E from Figure 1: <b>${f(DM,3)} %</b>. Deviation of E from Figure 2: <b>${f(DQ,3)} %</b>.</p>`;
 
-  // diagrams
-  chart('cv',V,Vmax,'Shear force V(x)','N',L);
-  chart('cm',M,Mmax,'Bending moment M(x)','N·m',L);
-  $('eq').innerHTML=eq+' Here <code>I = bh³ / 12</code>.';
+function upd(){
+ const L=+$("L").value,W=+$("W").value;
+ [["cL",L],["cW",W]].forEach(([id,v])=>[...$(id).children].forEach(b=>b.classList.toggle("on",+b.textContent===v)));
+ if(!(L>=50&&L<=700&&W>=0)){$("stats").innerHTML=`<div class="stat"><span>Check inputs</span><b class="warn">ℓ must be 50–700 mm and W ≥ 0</b></div>`;return}
+ const c=calc(L,W),m=slopeFor(L),E=Efor(L),w=[];
+ if(c.z>25)w.push("Beyond the 25 mm indicator range");if(W>60)w.push("Beyond the 60 N load-cell range");
+ $("stats").innerHTML=[["Free-end deflection z",f(c.z,4)+" mm"],["Value comes from",c.src],["Slope m = z/W",f(m,4)+" mm/N"],["Young’s modulus E (this length)",f(E,6)+" MPa"]].map(a=>`<div class="stat"><span>${a[0]}</span><b>${a[1]}</b></div>`).join("")+(w.length?`<div class="stat"><span>Warning</span><b class="warn">${w.join("; ")}</b></div>`:"");
+ $("bar").innerHTML=bar(L,W,c.z);$("f1").innerHTML=fig1([W,c.z]);
 }
 
-function chart(id,fn,mx,title,unit,L){
-  const X0=40,X1=330,B=95,H=70;let d=`M${X0} ${B}`;
-  for(let i=0;i<=40;i++){const x=L*i/40;d+=` L${X0+(X1-X0)*i/40} ${B-(mx>0?fn(x)/mx:0)*H}`}
-  $(id).innerHTML=`<line class="ax" x1="${X0}" y1="${B}" x2="${X1}" y2="${B}"/><line class="ax" x1="${X0}" y1="${B-H}" x2="${X0}" y2="${B}"/>`+
-  `<path class="fill" d="${d} L${X1} ${B} Z"/><path class="ln" d="${d}"/>`+
-  `<text class="lbl" x="${X0}" y="12" style="font-size:12px">${title}, peak ${f(mx)} ${unit}</text>`+
-  `<text class="lblm" x="${X0}" y="112">wall (x = 0)</text><text class="lblm" x="${X1}" y="112" text-anchor="end">free end (x = L)</text>`;
-}
+/* ---------- setup ---------- */
+$("const").innerHTML=`Beam: mild steel · b = ${B} mm · d = ${T} mm · I = ${f(I,4)} m⁴ · E<sub>ref</sub> = ${EREF} GPa (190–210 GPa)`;
+const mk=(id,arr,inp)=>arr.forEach(v=>{const b=document.createElement("button");b.className="chip";b.textContent=v;b.onclick=()=>{$(inp).value=v;upd()};$(id).appendChild(b)});
+mk("cL",LS,"L");mk("cW",WS,"W");
+$("f2").innerHTML=fig2();$("l1").innerHTML=leg1();$("l2").innerHTML=leg2();$("tbl").innerHTML=tbl();
+["L","W"].forEach(i=>$(i).addEventListener("input",upd));upd();
 
-$('mat').addEventListener('change',()=>{const v=$('mat').value;if(v!=='custom'){const[e,y]=v.split(',');$('E').value=e;$('Y').value=y}update()});
-['E','Y'].forEach(i=>$(i).addEventListener('input',()=>{$('mat').value='custom'}));
-ids.forEach(i=>{$(i).addEventListener('input',update);$(i).addEventListener('change',update)});
-update();
+/* ---------- buttons ---------- */
+const view=v=>{document.body.dataset.view=v;window.scrollTo(0,0)};
+$("bPrint").onclick=()=>window.print();
+document.querySelectorAll(".back").forEach(b=>b.onclick=()=>view("app"));
+document.querySelectorAll(".pr").forEach(b=>b.onclick=()=>window.print());
+
+$("bReport").onclick=()=>{
+ const L=+$("L").value,W=+$("W").value,c=calc(L,W),r6=R[600],r3=R[300],inR=EM/1000>=190&&EM/1000<=210;
+ const raw=`<table><tr><th>W (N)</th>${LS.map(l=>`<th>z at ${l} mm</th>`).join("")}</tr>`+WS.map((w,i)=>`<tr><td>${w}</td>${LS.map(l=>`<td>${D[l][i]}</td>`).join("")}</tr>`).join("")+`</table>`;
+ $("report").innerHTML=`<h1>Bending Test of Cantilevers – Data and Results</h1>
+<p>ME/CEE 2140 · Lab 3 (B) · SM1004 Beam Apparatus &nbsp;|&nbsp; Name: <span contenteditable>&nbsp;</span> ID: <span contenteditable>&nbsp;</span> Section: <span contenteditable>&nbsp;</span> Date: <span contenteditable>${new Date().toLocaleDateString()}</span></p>
+<h2>Setup</h2><p>A mild-steel strip (b = ${B} mm, d = ${T} mm, I = bd³/12 = ${f(I,4)} m⁴) was clamped as a cantilever. A load cell applied W = 0–10 N at the free end, and a dial indicator at the same point measured z. Working lengths were 200, 300, 400, 500 and 600 mm.</p>
+<h2>Measured deflection z (mm)</h2>${raw}
+<h2>Regression summary (z vs W)</h2>${tbl()}
+<h2>Representative calculations</h2>
+<p>I = (0.019)(0.00635)³/12 = ${f(I,4)} m⁴ &nbsp;|&nbsp; E (ℓ = 600 mm) = ℓ³/(3Im) = (0.216)/(3·${f(I,4)}·${f(R[600].m/1000,5)}) = ${f(R[600].E,6)} MPa</p>
+<p>E (z–ℓ³) = W/(3Iq) = 10/(3·${f(I,4)}·${f(Q.m,4)}) = ${f(Q.E,6)} MPa &nbsp;|&nbsp; % deviation = 100·|E − E<sub>ref</sub>|/E<sub>ref</sub> = ${f(DQ,3)} %</p>
+<div class="two"><div><h2>Figure 1</h2>${fig1(null)}<ul class="leg">${leg1()}</ul></div><div><h2>Figure 2</h2>${fig2()}<ul class="leg">${leg2()}</ul></div></div>
+<h2>Observations</h2>
+<p>• Slope ratio m(600 mm)/m(300 mm) = ${f(r6.m/r3.m,3)}; ideal theory predicts (600/300)³ = 8.<br>
+• E from the five z–W slopes ranges from ${f(Math.min(...LS.map(l=>R[l].E))/1000,4)} to ${f(Math.max(...LS.map(l=>R[l].E))/1000,4)} GPa (mean ${f(EM/1000,4)} GPa, ${inR?"inside":"outside"} the 190–210 GPa actual range).<br>
+• The smallest R² is ${f(Math.min(...LS.map(l=>R[l].r2)),5)} (z–W) and ${f(Q.r2,5)} (z–ℓ³). Intercepts range from ${f(Math.min(...LS.map(l=>R[l].c)),3)} to ${f(Math.max(...LS.map(l=>R[l].c)),3)} mm.<br>
+• Simulator reading used while writing this: ℓ = ${L} mm, W = ${W} N → z = ${f(c.z,3)} mm (${c.src.toLowerCase()}).</p>`;
+ view("report")};
+
+$("bSlide").onclick=()=>{
+ const L=+$("L").value,W=+$("W").value,c=calc(L,W);
+ $("slide").innerHTML=`<h1>🎀 Cantilever Bending Test: Young’s Modulus of Mild Steel</h1>
+<div>${bar(L,W,c.z)}</div><div>${fig1([W,c.z])}</div>
+<div class="big"><div><b>${f(EM/1000,4)} GPa</b><span>Mean E from z–W slopes (${f(DM,3)} % from ${EREF})</span></div><div><b>${f(Q.E/1000,4)} GPa</b><span>E from z–ℓ³ at 10 N (${f(DQ,3)} % from ${EREF})</span></div><div><b>${EREF} GPa</b><span>TecQuipment reference (actual 190–210)</span></div></div>`;
+ view("slide")};
 </script>
 </body>
 </html>
