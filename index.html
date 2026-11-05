@@ -4,63 +4,69 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Cantilever Bending Test – Lab 3 (B)</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
 <style>
 /* ===== COLOR SCHEME: edit these hex codes to recolor the page ===== */
-:root{--bg:#ffffff;--card:#ffffff;--tint:#f3f7fb;--tx:#34435a;--mu:#7b8aa0;--bd:#e1e9f2;--pink:#ff7eb6;--sky:#6bb7f5;--mint:#3cc9a6;--lav:#a78bfa;--peach:#ffab76;--warn:#d6336c;
+:root{--bg:#0e171d;--card:#15222b;--tint:#1b2b36;--tx:#eaf1f0;--mu:#9bb0b6;--bd:#2a3d49;--accent:#e06a18;--accent-d:#f39a50;--red:#f0592a;--yel:#fdd472;--teal:#7db4a6;--ring:#fdd472;--dial:#c9d6d5;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}[hidden]{display:none!important}
-body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 "Nunito","Trebuchet MS",system-ui,sans-serif}
-main,.wrap{max-width:1060px;margin:0 auto;padding:16px 14px 40px}
-h1{font-size:1.5rem;margin:0}h2{font-size:1rem;margin:0 0 8px}
-.hero{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;background:linear-gradient(120deg,var(--tint),#fff0f6);border:2px solid var(--bd);border-radius:18px;padding:14px 18px}
-.hero p{margin:0;color:var(--mu);font-size:.9rem}
-button{font:inherit;font-weight:700;color:var(--tx);background:var(--card);border:2px solid var(--bd);border-radius:999px;padding:6px 14px;cursor:pointer}
-button:hover{border-color:var(--pink)}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--sky);outline-offset:1px}
-.btns,.tabs,.vt{display:flex;gap:8px;flex-wrap:wrap}.tabs{margin:14px 0 0}
-.tab.on,.chip.on{background:var(--pink);border-color:var(--pink);color:#fff}.chip{padding:2px 12px;font-size:.85rem}
-.card{background:var(--card);border:2px solid var(--bd);border-radius:18px;padding:14px}
-.grid{display:grid;grid-template-columns:300px 1fr;gap:14px;margin-top:14px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.col{display:grid;gap:14px;align-content:start}
+body{margin:0;color:var(--tx);font:17px/1.5 "Times New Roman",Times,serif;background:radial-gradient(1000px 480px at 88% -8%,rgba(224,106,24,.20),transparent 62%),radial-gradient(800px 460px at -8% 6%,rgba(125,180,166,.15),transparent 60%),#0e171d;background-attachment:fixed}
+main,.wrap{max-width:1060px;margin:0 auto;padding:22px 16px 48px}
+h1{font-size:2.1rem;font-weight:700;letter-spacing:.005em;margin:0;line-height:1.15;background:linear-gradient(90deg,#fdd472,#e06a18);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font-size:1.05rem;font-weight:700;margin:0 0 10px;letter-spacing:.02em}
+.top{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:flex-end;padding:4px 0 18px}
+.top p{margin:4px 0 0;color:var(--mu);font-size:.95rem}
+button{font:inherit;font-weight:700;font-size:.92rem;color:var(--tx);background:var(--tint);border:1px solid var(--bd);border-radius:8px;padding:7px 15px;cursor:pointer}
+button:hover{border-color:var(--accent);color:var(--yel)}button:focus-visible,input:focus-visible{outline:3px solid var(--yel);outline-offset:1px}
+.btns,.vt{display:flex;gap:8px;flex-wrap:wrap}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--bd)}
+.tab{border:0;border-radius:0;background:none;padding:10px 18px;color:var(--mu);border-bottom:3px solid transparent;margin-bottom:-1px;font-size:1rem}
+.tab.on{color:var(--yel);border-bottom-color:var(--accent)}.tab:hover{background:none}
+.chip{padding:4px 13px;font-size:.88rem;border-radius:6px}.chip.on{background:var(--accent);border-color:var(--accent);color:#10181e}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px;box-shadow:0 10px 28px rgba(0,0,0,.35)}
+.grid{display:grid;grid-template-columns:300px 1fr;gap:16px;margin-top:18px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.col{display:grid;gap:16px;align-content:start}
 @media(max-width:800px){.grid,.grid2{grid-template-columns:1fr}}
-.row{margin-bottom:10px}.row label{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:.85rem;color:var(--mu)}
-.row input[type=number]{width:84px;padding:3px 8px;font:inherit;color:var(--tx);background:var(--tint);border:2px solid var(--bd);border-radius:10px;text-align:right}
-input[type=range]{width:100%;accent-color:var(--pink);margin:2px 0 0}
-select{width:100%;padding:7px 10px;font:inherit;color:var(--tx);background:var(--tint);border:2px solid var(--bd);border-radius:12px}
+.row{margin-bottom:14px}.row label{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:.92rem;color:var(--mu)}
+.row input[type=number]{width:86px;padding:3px 8px;font:inherit;color:var(--yel);background:var(--tint);border:1px solid var(--bd);border-radius:6px;text-align:right}
+input[type=range]{width:100%;accent-color:var(--accent);margin:3px 0 0}
 svg{display:block;width:100%;height:auto}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
-.stat{background:var(--tint);border-radius:14px;padding:8px 12px}.stat span{display:block;font-size:.75rem;color:var(--mu);font-weight:700}.stat b{font-size:1.05rem}
-.warn{color:var(--warn)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-top:16px}
+.stat{background:var(--card);border:1px solid var(--bd);border-left:3px solid var(--teal);border-radius:10px;padding:8px 12px}.stat span{display:block;font-size:.78rem;color:var(--mu);font-weight:700;text-transform:uppercase;letter-spacing:.05em}.stat b{font-size:1.15rem;color:var(--yel)}
+.warn,.stat b.warn{color:var(--red)}
 .gr{stroke:var(--bd);stroke-width:1}.ax{stroke:var(--mu);stroke-width:1.5}.tk{fill:var(--mu);font-size:10px}.al{fill:var(--tx);font-size:11px;font-weight:700}
-.t{fill:var(--tx);font-size:12px}.tm{fill:var(--mu);font-size:11px}.tb{font-weight:800;font-size:13px}
-.leg{list-style:none;margin:6px 0 0;padding:0;font-size:.78rem}.leg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;background:var(--pink)}
-table{border-collapse:collapse;width:100%;font-size:.82rem}th,td{padding:4px 7px;border-bottom:1px solid var(--bd);text-align:right}th{color:var(--mu);font-weight:700}th:first-child,td:first-child{text-align:left}
-.mp td:last-child{font-weight:700}
-#v3{height:320px;cursor:grab;border-radius:12px;background:linear-gradient(var(--tint),#fff);position:relative}#v3 canvas{display:block;width:100%;border-radius:12px}
-.note{font-size:.78rem;color:var(--mu);margin:6px 0 0}
-details summary{cursor:pointer;font-weight:800}
-.eqr{display:grid;grid-template-columns:62px 1.1fr 1.3fr;gap:4px 14px;align-items:center;padding:10px 0;border-bottom:1px solid var(--bd)}
+.t{fill:var(--tx);font-size:12px}.tm{fill:var(--mu);font-size:11px}.tb{font-weight:700;font-size:13px}
+.glow{filter:drop-shadow(0 0 6px rgba(224,106,24,.5))}.gl{filter:drop-shadow(0 0 4px rgba(224,106,24,.85))}
+.leg{list-style:none;margin:8px 0 0;padding:0;font-size:.86rem}.leg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;background:var(--accent)}.leg i.ring{background:rgba(253,212,114,.35);border:2px solid var(--ring);width:11px;height:11px}
+table{border-collapse:collapse;width:100%;font-size:.92rem}th,td{padding:5px 7px;border-bottom:1px solid var(--bd);text-align:right}th{color:var(--mu);font-weight:700}th:first-child,td:first-child{text-align:left}
+.mp td:last-child{font-weight:700;color:var(--yel)}
+#v3{height:320px;cursor:grab;border-radius:8px;background:var(--tint);position:relative}#v3 canvas{display:block;width:100%;border-radius:8px}
+.note{font-size:.86rem;color:var(--mu);margin:6px 0 0}
+details summary{cursor:pointer;font-weight:700}
+.eqr{display:grid;grid-template-columns:70px 1.1fr 1.3fr;gap:4px 14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--bd)}
 .eqr:last-child{border:0}@media(max-width:700px){.eqr{grid-template-columns:1fr}}
-.en{font-weight:800;color:var(--pink)}.ef{font-size:1.1rem}.ef small{display:block;font-size:.75rem;color:var(--mu)}.ev{font-size:.85rem;color:var(--tx);background:var(--tint);border-radius:10px;padding:5px 10px}
+.en{font-weight:700;color:var(--accent-d)}.ef{font-size:1.25rem}.ef small{display:block;font-size:.82rem;color:var(--mu)}.ev{font-size:.95rem;background:var(--tint);border-radius:6px;padding:5px 10px;color:var(--yel)}
 .fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 4px;line-height:1.25}.fr span:first-child{border-bottom:1.5px solid currentColor;padding:0 5px}
 #reportWrap,#slideWrap{display:none}
 body[data-view=report] #app,body[data-view=slide] #app{display:none}
 body[data-view=report] #reportWrap,body[data-view=slide] #slideWrap{display:block}
 .bar2{display:flex;justify-content:space-between;gap:8px;max-width:780px;margin:0 auto 10px}
-.paper{background:#fff;color:#2b3445;max-width:780px;margin:0 auto;padding:22px 26px;border:2px solid var(--bd);border-radius:8px;font-size:11px;line-height:1.35;--tx:#2b3445;--mu:#66758c}
-.paper h1{font-size:17px}.paper h2{font-size:12px;margin:10px 0 3px;color:#d6337c}.paper table{font-size:10px}.paper p{margin:3px 0}.paper .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.paper .leg{font-size:8.5px}
+.paper{background:#fff;color:#1b2a33;max-width:780px;margin:0 auto;padding:22px 26px;border-radius:8px;font-size:12px;line-height:1.35;--tx:#1b2a33;--mu:#5f7380;--bd:#dde6e4;--tint:#f2f7f6;--card:#fff;--ring:#1b2a33;--dial:#1b2a33;--yel:#1b2a33}
+.paper h1{font-size:19px;background:none;-webkit-background-clip:initial;background-clip:initial;color:#1b2a33}.paper h2{font-size:13px;margin:10px 0 3px;color:#b8500f}.paper table{font-size:11px}.paper p{margin:3px 0}.paper .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.paper .leg{font-size:9.5px}.paper .glow,.paper .gl{filter:none}.paper .leg i.ring{background:#fdd472}
 .paper [contenteditable]{border-bottom:1px dashed #bbb;min-width:60px;display:inline-block}
-#slide{aspect-ratio:16/9;max-width:960px;margin:0 auto;border-radius:14px;padding:2.2% 3%;display:grid;grid-template-columns:1.15fr 1fr;grid-template-rows:auto 1fr auto;gap:8px 18px;color:#2b3445;--tx:#2b3445;--mu:#66758c;background:linear-gradient(120deg,#f3f7fb,#fff0f6);border:2px solid var(--bd)}
-#slide h1{grid-column:1/3;font-size:clamp(16px,2.8vw,28px)}#slide .leg{display:none}
-.big{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;grid-column:1/3}.big div{background:#fff;border-radius:14px;padding:6px 12px;text-align:center}.big b{display:block;font-size:clamp(14px,2.4vw,24px);color:#d6337c}.big span{font-size:clamp(9px,1.2vw,13px);color:#66758c}
-@media print{.noprint{display:none!important}main,.wrap{padding:0}.paper{border:0;padding:0;max-width:none}#slide{max-width:none;border-radius:0;print-color-adjust:exact;-webkit-print-color-adjust:exact}#slideWrap{page:slide}@page slide{size:landscape;margin:.35in}@page{margin:.5in}}
+#slide{aspect-ratio:16/9;max-width:960px;margin:0 auto;border-radius:12px;padding:2.2% 3%;display:grid;grid-template-columns:1.15fr 1fr;grid-template-rows:auto 1fr auto;gap:8px 18px;--tx:#eaf1f0;--mu:#9bb0b6;--bd:#2a3d49;--tint:#1b2b36;--card:#15222b;--ring:#fdd472;--dial:#c9d6d5;--yel:#fdd472;color:#eaf1f0;background:radial-gradient(700px 300px at 90% 0,rgba(224,106,24,.25),transparent 65%),#0e171d;border:1px solid var(--bd);border-top:5px solid var(--accent)}
+#slide h1{grid-column:1/3;font-size:clamp(16px,2.8vw,30px)}#slide .leg{display:none}
+.big{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;grid-column:1/3}.big div{background:#15222b;border:1px solid #2a3d49;border-left:3px solid #7db4a6;border-radius:10px;padding:6px 12px;text-align:center}.big b{display:block;font-size:clamp(14px,2.4vw,26px);color:#fdd472}.big span{font-size:clamp(9px,1.2vw,14px);color:#9bb0b6}
+@media print{
+:root{--bg:#fff!important;--card:#fff!important;--tint:#f2f7f6!important;--tx:#1b2a33!important;--mu:#5f7380!important;--bd:#dde6e4!important;--ring:#1b2a33!important;--dial:#1b2a33!important;--accent-d:#b8500f!important;--red:#e2461a!important;--yel:#1b2a33!important}
+body{background:#fff!important;color:#1b2a33}h1{background:none;color:#1b2a33}.card,.stat{box-shadow:none}.glow,.gl{filter:none}
+.noprint{display:none!important}main,.wrap{padding:0}.paper{border:0;padding:0;max-width:none}#slide{max-width:none;border-radius:0;print-color-adjust:exact;-webkit-print-color-adjust:exact}#slideWrap{page:slide}@page slide{size:landscape;margin:.35in}@page{margin:.5in}}
 </style>
 </head>
 <body data-view="app">
 <main id="app">
-<div class="hero"><div><h1>🎀 Cantilever Bending Test</h1><p>ME/CEE 2140 · Lab 3 (B) · SM1004 Beam Apparatus</p></div>
-<div class="btns noprint"><button id="bPrint">🖨️ Print</button><button id="bReport">📝 Student report</button><button id="bSlide">🎞️ Slide</button></div></div>
+<header class="top"><div><h1>Cantilever Bending Test</h1><p>ME/CEE 2140 · Lab 3 (B) · SM1004 Beam Apparatus</p></div>
+<div class="btns noprint"><button id="bPrint">Print</button><button id="bReport">Student report</button><button id="bSlide">Slide</button></div></header>
 <div class="tabs noprint"><button class="tab on" data-t="sim">Simulator</button><button class="tab" data-t="eq">Equations</button></div>
 
 <section id="sim">
@@ -71,13 +77,11 @@ body[data-view=report] #reportWrap,body[data-view=slide] #slideWrap{display:bloc
 <div class="row"><label for="W">Free-end load W (N) <input id="W" type="number" value="10" min="0" max="60" step="0.5"></label><input id="Wr" type="range" min="0" max="60" step="0.5" value="10"></div>
 <div class="row"><label for="b">Beam width b (mm) <input id="b" type="number" value="19" min="5" max="50" step="0.5"></label><input id="br" type="range" min="5" max="50" step="0.5" value="19"></div>
 <div class="row"><label for="d">Beam thickness d (mm) <input id="d" type="number" value="6.35" min="1" max="12" step="0.05"></label><input id="dr" type="range" min="1" max="12" step="0.05" value="6.35"></div>
-<label for="mat" style="font-weight:700;font-size:.85rem;color:var(--mu)">Material</label>
-<select id="mat"><option value="steel">Mild steel</option><option value="al">Aluminum 6061‑T6</option><option value="br">Brass</option><option value="ti">Titanium Ti‑6Al‑4V</option><option value="ac">Acrylic (PMMA)</option></select>
 </div>
 <div class="card"><h2>Material properties</h2><table class="mp" id="mp"></table></div>
 </div>
 <div class="card">
-<div class="vt noprint" style="margin-bottom:8px"><button class="chip on" id="v2b">Side view</button><button class="chip" id="v3b">3D view</button></div>
+<div class="vt noprint" style="margin-bottom:10px"><button class="chip on" id="v2b">Side view</button><button class="chip" id="v3b">3D view</button></div>
 <div id="bar"></div><div id="v3" hidden></div><p class="note noprint" id="n3" hidden>Drag to rotate the beam.</p>
 </div>
 </div>
@@ -91,8 +95,8 @@ body[data-view=report] #reportWrap,body[data-view=slide] #slideWrap{display:bloc
 
 <section id="eq" hidden><div class="card"><h2>Equations</h2><p class="note" style="margin:0 0 4px">Every value on the right updates with your current slider settings.</p><div id="eqs"></div></div></section>
 </main>
-<div id="reportWrap"><div class="wrap"><div class="bar2 noprint"><button class="back">← Back</button><button class="pr">🖨️ Print / Save as PDF</button></div><article class="paper" id="report"></article></div></div>
-<div id="slideWrap"><div class="wrap"><div class="bar2 noprint"><button class="back">← Back</button><button class="pr">🖨️ Print / Save as PDF</button></div><div id="slide"></div></div></div>
+<div id="reportWrap"><div class="wrap"><div class="bar2 noprint"><button class="back">← Back</button><button class="pr">Print / Save as PDF</button></div><article class="paper" id="report"></article></div></div>
+<div id="slideWrap"><div class="wrap"><div class="bar2 noprint"><button class="back">← Back</button><button class="pr">Print / Save as PDF</button></div><div id="slide"></div></div></div>
 
 <script>
 /* ---------- core ---------- */
@@ -106,7 +110,7 @@ const EM=LS.reduce((a,L)=>a+R[L].E,0)/LS.length;
 const Q=reg(LS.map(L=>R[L].l3),LS.map(L=>D[L][5]/1000));Q.E=10/(3*I*Q.m)/1e6;
 const dev=E=>100*Math.abs(E/1000-EREF)/EREF,DM=dev(EM),DQ=dev(Q.E);
 const base=(L,W)=>{if(D[L]){const i=WS.indexOf(W);return i>=0?D[L][i]:Math.max(0,R[L].m*W+R[L].c)}return W*(L/1000)**3/(3*EM*1e6*I)*1000};
-const MAT={steel:{n:"Mild steel",E:EM/1000,y:250,rho:7850,nu:.29},al:{n:"Aluminum 6061‑T6",E:68.9,y:276,rho:2700,nu:.33},br:{n:"Brass",E:100,y:200,rho:8500,nu:.34},ti:{n:"Titanium Ti‑6Al‑4V",E:114,y:880,rho:4430,nu:.34},ac:{n:"Acrylic (PMMA)",E:3.2,y:70,rho:1180,nu:.37}};
+const MAT={steel:{n:"Mild steel",E:EM/1000,y:250,rho:7850,nu:.29}};
 const sc=s=>EM*I/(s.m.E*1000*Ib(s.b,s.d));
 const zAt=(s,L,W)=>base(L,W)*sc(s);
 const f=(x,d=4)=>{if(!isFinite(x))return"–";const a=Math.abs(x);if(a!==0&&(a<1e-3||a>=1e6))return x.toExponential(2);return String(+x.toPrecision(d))};
@@ -118,24 +122,25 @@ function cur(s){const ib=Ib(s.b,s.d),z=zAt(s,s.L,s.W),pts=WS.map(w=>[w,zAt(s,s.L
 <script>
 const $=id=>document.getElementById(id);
 const sg=(c,d=3)=>(c<0?" − ":" + ")+f(Math.abs(c),d);
-const st=()=>({L:+$("L").value,W:+$("W").value,b:+$("b").value,d:+$("d").value,m:MAT[$("mat").value]});
+const st=()=>({L:+$("L").value,W:+$("W").value,b:+$("b").value,d:+$("d").value,m:MAT.steel});
 const tf=v=>String(+v.toPrecision(3));
 const nice=v=>{if(!(v>0))return 1;const p=10**Math.floor(Math.log10(v)),n=v/p;return[1,1.2,1.5,2,2.5,3,4,5,6,8,10].find(x=>x>=n-1e-9)*p};
 const fr=(n,d)=>`<span class="fr"><span>${n}</span><span>${d}</span></span>`;
 
 function bar(L,W,z){
+ const mix=t=>{const a=[224,106,24],b=[125,180,166];return`rgb(${a.map((v,i)=>Math.round(b[i]+(v-b[i])*t))})`};
  const y0=100,xc=150,ps=520/700,Lp=Math.max(30,Math.min(L,700)*ps),drop=z>0?14+76*(1-Math.exp(-z/5)):0,k=z>0?Math.round(drop/(z*ps)):0;
  const tx=xc+Lp,ty=y0+drop,end=tx>560?"end":"start",o=end==="end"?-14:14,st="stroke:var(--mu);fill:none";
  let s=`<svg viewBox="0 0 720 300" role="img" aria-label="Cantilever beam deflecting under load">`;
  s+=`<text class="tm" x="12" y="292">Drawing auto-scaled${k?" (deflection shown about "+k+"× larger)":""}</text>`;
  s+=`<path d="M90 ${y0}V${y0-55}M72 ${y0-55}H108" style="${st};stroke-width:2"/><text class="tm" x="90" y="${y0-62}" text-anchor="middle">string</text>`;
- s+=`<line x1="${xc}" y1="${y0}" x2="${tx}" y2="${y0}" style="stroke:var(--mu);stroke-dasharray:5 5"/><line x1="90" y1="${y0}" x2="${xc}" y2="${y0}" style="stroke:var(--sky);stroke-width:9"/>`;
- const N=40,yy=x=>y0+drop*(3*x*x-x**3)/2;for(let i=0;i<N;i++){const a=i/N,b=(i+1)/N,t=1-(a+b)/2;
-  s+=`<line x1="${xc+Lp*a}" y1="${yy(a)}" x2="${xc+Lp*b}" y2="${yy(b)}" stroke="hsl(${205+135*t} 90% 72%)" stroke-width="9"/>`}
- s+=`<rect x="${xc-12}" y="${y0-24}" width="24" height="48" rx="5" style="fill:#9fb1c6"/><rect x="${xc-5}" y="${y0+24}" width="10" height="90" style="fill:#9fb1c6"/><text class="tm" x="${xc}" y="${y0+128}" text-anchor="middle">clamp</text>`;
- s+=`<line x1="${tx}" y1="${ty+8}" x2="${tx}" y2="218" style="stroke:var(--lav);stroke-width:2"/><rect x="${tx-11}" y="218" width="22" height="40" rx="6" style="fill:var(--lav)"/><circle cx="${tx}" cy="238" r="7" style="fill:#fff"/>`;
+ s+=`<line x1="${xc}" y1="${y0}" x2="${tx}" y2="${y0}" style="stroke:var(--mu);stroke-dasharray:5 5"/><line x1="90" y1="${y0}" x2="${xc}" y2="${y0}" style="stroke:var(--teal);stroke-width:9"/>`;
+ s+='<g class="glow">';const N=40,yy=x=>y0+drop*(3*x*x-x**3)/2;for(let i=0;i<N;i++){const a=i/N,b=(i+1)/N,t=1-(a+b)/2;
+  s+=`<line x1="${xc+Lp*a}" y1="${yy(a)}" x2="${xc+Lp*b}" y2="${yy(b)}" stroke="${mix(t)}" stroke-width="9"/>`}s+="</g>";
+ s+=`<rect x="${xc-12}" y="${y0-24}" width="24" height="48" rx="5" style="fill:#7a93a3"/><rect x="${xc-5}" y="${y0+24}" width="10" height="90" style="fill:#7a93a3"/><text class="tm" x="${xc}" y="${y0+128}" text-anchor="middle">clamp</text>`;
+ s+=`<line x1="${tx}" y1="${ty+8}" x2="${tx}" y2="218" style="stroke:var(--dial);stroke-width:2"/><rect x="${tx-11}" y="218" width="22" height="40" rx="6" style="fill:var(--dial)"/><circle cx="${tx}" cy="238" r="7" style="fill:var(--card)"/>`;
  s+=`<text class="t tb" x="${tx+o}" y="232" text-anchor="${end}">z = ${f(z,3)} mm</text><text class="tm" x="${tx+o}" y="248" text-anchor="${end}">dial indicator</text>`;
- s+=`<line x1="${tx}" y1="${ty-58}" x2="${tx}" y2="${ty-14}" style="stroke:var(--pink);stroke-width:3"/><path d="M${tx-7} ${ty-18}L${tx+7} ${ty-18}L${tx} ${ty-6}Z" style="fill:var(--pink)"/><rect x="${tx-14}" y="${ty-71}" width="28" height="13" rx="4" style="fill:var(--pink)"/>`;
+ s+=`<line x1="${tx}" y1="${ty-58}" x2="${tx}" y2="${ty-14}" style="stroke:var(--red);stroke-width:3"/><path d="M${tx-7} ${ty-18}L${tx+7} ${ty-18}L${tx} ${ty-6}Z" style="fill:var(--red)"/><rect x="${tx-14}" y="${ty-71}" width="28" height="13" rx="4" style="fill:var(--red)"/>`;
  s+=`<text class="t tb" x="${tx+o}" y="${ty-48}" text-anchor="${end}">W = ${f(W,3)} N</text>`;
  s+=`<path d="M${xc} 10V22M${tx} 10V22M${xc} 16H${tx}" style="${st}"/><text class="t" x="${(xc+tx)/2}" y="32" text-anchor="middle">ℓ = ${f(L,4)} mm</text></svg>`;
  return s}
@@ -145,17 +150,17 @@ function chart(o){const w=380,h=270,l=54,r=14,t=12,b=44,pw=w-l-r,ph=h-t-b,X=v=>l
  for(let i=0;i<=5;i++){const a=o.xm*i/5,c=o.ym*i/5;s+=`<line class="gr" x1="${X(a)}" y1="${t}" x2="${X(a)}" y2="${t+ph}"/><line class="gr" x1="${l}" y1="${Y(c)}" x2="${l+pw}" y2="${Y(c)}"/><text class="tk" x="${X(a)}" y="${t+ph+14}" text-anchor="middle">${tf(a)}</text><text class="tk" x="${l-6}" y="${Y(c)+4}" text-anchor="end">${tf(c)}</text>`}
  s+=`<line class="ax" x1="${l}" y1="${t+ph}" x2="${l+pw}" y2="${t+ph}"/><line class="ax" x1="${l}" y1="${t}" x2="${l}" y2="${t+ph}"/>`;
  let x2=o.xm,y2=o.c+o.m*x2;if(y2>o.ym){x2=(o.ym-o.c)/o.m;y2=o.ym}
- s+=`<line x1="${X(0)}" y1="${Y(o.c)}" x2="${X(x2)}" y2="${Y(y2)}" style="stroke:var(--pink);stroke-width:2"/>`;
- o.pts.forEach(p=>s+=`<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="3.8" style="fill:var(--pink)"/>`);
- if(o.hi&&o.hi[0]<=o.xm&&o.hi[1]<=o.ym)s+=`<circle cx="${X(o.hi[0])}" cy="${Y(o.hi[1])}" r="8" style="fill:none;stroke:var(--sky);stroke-width:2.5"/>`;
+ s+=`<line class="gl" x1="${X(0)}" y1="${Y(o.c)}" x2="${X(x2)}" y2="${Y(y2)}" style="stroke:var(--accent);stroke-width:2"/>`;
+ o.pts.forEach(p=>s+=`<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="3.8" style="fill:var(--accent)"/>`);
+ if(o.hi&&o.hi[0]<=o.xm&&o.hi[1]<=o.ym)s+=`<circle cx="${X(o.hi[0])}" cy="${Y(o.hi[1])}" r="8" style="fill:rgba(253,212,114,.25);stroke:var(--ring);stroke-width:2.5"/><text x="${X(o.hi[0])+(X(o.hi[0])>w-80?-12:12)}" y="${Y(o.hi[1])-10}" text-anchor="${X(o.hi[0])>w-80?"end":"start"}" style="fill:var(--ring);font-size:11px;font-weight:800">current</text>`;
  s+=`<text class="al" x="${l+pw/2}" y="${h-6}" text-anchor="middle">${o.xl}</text><text class="al" transform="translate(13 ${t+ph/2}) rotate(-90)" text-anchor="middle">${o.yl}</text></svg>`;return s}
 
 function fig1(s,c){const xm=nice(Math.max(10,s.W)),ym=nice(Math.max(c.r.c+c.r.m*xm,c.z,.01)*1.02);
  return chart({xm,ym,c:c.r.c,m:c.r.m,pts:c.pts,hi:[s.W,c.z],al:"Deflection versus load",xl:"Load W [N]",yl:"Deflection Z [mm]"})}
 function fig2(s,c){const l3=(s.L/1000)**3,xm=nice(Math.max(.216,l3)*1.05),zr=zAt(s,s.L,10)/1000,ym=nice(Math.max(...c.p2.map(p=>p[1]),zr)*1.05);
  return chart({xm,ym,c:c.q.c,m:c.q.m,pts:c.p2,hi:[l3,zr],al:"Deflection versus l cubed",xl:"ℓ³ [m³]",yl:"Deflection Z [m]"})}
-const leg1=(s,c)=>`<li><i></i>ℓ = ${f(s.L,4)} mm: z = ${f(c.r.m,4)}·W${sg(c.r.c)}, R² = ${f(c.r.r2,5)}</li>`;
-const leg2=c=>`<li><i></i>z = ${f(c.q.m,4)}·ℓ³${sg(c.q.c,2)}, R² = ${f(c.q.r2,5)}</li>`;
+const leg1=(s,c)=>`<li><i></i>ℓ = ${f(s.L,4)} mm: z = ${f(c.r.m,4)}·W${sg(c.r.c)}, R² = ${f(c.r.r2,5)}</li><li><i class="ring"></i>Current setting: W = ${f(s.W,3)} N, z = ${f(c.z,3)} mm</li>`;
+const leg2=c=>{const s=st();return `<li><i></i>z = ${f(c.q.m,4)}·ℓ³${sg(c.q.c,2)}, R² = ${f(c.q.r2,5)}</li><li><i class="ring"></i>Current setting: ℓ = ${f(s.L,4)} mm, z = ${f(zAt(s,s.L,10),3)} mm at W = 10 N</li>`};
 
 const tbl=()=>`<table><tr><th>ℓ (mm)</th><th>ℓ³ (m³)</th><th>Slope m (mm/N)</th><th>Intercept (mm)</th><th>R²</th><th>E (MPa)</th></tr>`+LS.map(L=>`<tr><td>${L}</td><td>${f(R[L].l3,4)}</td><td>${f(R[L].m,5)}</td><td>${f(R[L].c,3)}</td><td>${f(R[L].r2,5)}</td><td>${f(R[L].E,6)}</td></tr>`).join("")+
 `<tr><td colspan="5"><b>Average E</b></td><td><b>${f(EM,6)}</b></td></tr></table>
@@ -167,9 +172,9 @@ let G=null,v3=false;
 function init3(){const el=$("v3");if(G)return;if(!window.THREE){el.textContent="The 3D view needs an internet connection to load.";return}
  const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(38,2,.1,100),ren=new THREE.WebGLRenderer({antialias:true,alpha:true}),root=new THREE.Group(),dyn=new THREE.Group();
  ren.setPixelRatio(Math.min(2,devicePixelRatio));el.appendChild(ren.domElement);sc.add(root);root.add(dyn);
- sc.add(new THREE.AmbientLight(0xffffff,.8));const dl=new THREE.DirectionalLight(0xffffff,.7);dl.position.set(6,10,8);sc.add(dl);
+ sc.add(new THREE.AmbientLight(0xffffff,.9));const dl=new THREE.DirectionalLight(0xffffff,.7);dl.position.set(6,10,8);sc.add(dl);
  cam.position.set(0,3,17);cam.lookAt(0,-1,0);root.rotation.set(.2,-.6,0);
- const grid=new THREE.GridHelper(16,16,0xcfdceb,0xe6eef6);grid.position.y=-4.2;root.add(grid);
+ const grid=new THREE.GridHelper(16,16,0x34505f,0x22384a);grid.position.y=-4.2;root.add(grid);
  G={sc,cam,ren,root,dyn};
  const c=ren.domElement;c.style.touchAction="none";let dn=false,px=0,py=0;
  c.onpointerdown=e=>{dn=true;px=e.clientX;py=e.clientY;c.setPointerCapture(e.pointerId)};c.onpointerup=()=>dn=false;
@@ -177,14 +182,14 @@ function init3(){const el=$("v3");if(G)return;if(!window.THREE){el.textContent="
  new ResizeObserver(()=>{const w=el.clientWidth;if(!w)return;ren.setSize(w,320);cam.aspect=w/320;cam.updateProjectionMatrix();ren.render(sc,cam)}).observe(el)}
 function up3(s,z){if(!G)return;const{dyn,ren,sc,cam}=G;while(dyn.children.length)dyn.remove(dyn.children[0]);
  const Lv=Math.min(s.L,700)/700*10,t=Math.max(.1,s.d*.0571),w=Math.max(.2,s.b*.0429),drop=z>0?(14+76*(1-Math.exp(-z/5)))/90*3.2:0;
- const geo=new THREE.BoxGeometry(Lv,t,w,40,1,1),pos=geo.attributes.position,col=new Float32Array(pos.count*3),c1=new THREE.Color(0xff7eb6),c2=new THREE.Color(0x6bb7f5),tmp=new THREE.Color();
+ const geo=new THREE.BoxGeometry(Lv,t,w,40,1,1),pos=geo.attributes.position,col=new Float32Array(pos.count*3),c1=new THREE.Color(0xe06a18),c2=new THREE.Color(0x7db4a6),tmp=new THREE.Color();
  for(let i=0;i<pos.count;i++){const a=(pos.getX(i)+Lv/2)/Lv;pos.setY(i,pos.getY(i)-drop*(3*a*a-a**3)/2);tmp.copy(c2).lerp(c1,1-a);col.set([tmp.r,tmp.g,tmp.b],i*3)}
  geo.setAttribute("color",new THREE.BufferAttribute(col,3));geo.computeVertexNormals();
  const mesh=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({vertexColors:true,roughness:.55}));mesh.position.x=Lv/2;dyn.add(mesh);
  const M=(g,c,x,y)=>{const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:c,roughness:.6}));m.position.set(x,y,0);dyn.add(m);return m};
- M(new THREE.BoxGeometry(.6,1.6,w+.8),0x9fb1c6,-.3,0);M(new THREE.CylinderGeometry(.18,.18,3.2),0x9fb1c6,-.3,-2.4);
- M(new THREE.CylinderGeometry(.07,.07,1.2),0xff6b9d,Lv,-drop+t/2+1);M(new THREE.ConeGeometry(.22,.45,16),0xff6b9d,Lv,-drop+t/2+.3).rotation.x=Math.PI;
- M(new THREE.CylinderGeometry(.2,.2,1.4),0xa78bfa,Lv,-drop-t/2-.7);
+ M(new THREE.BoxGeometry(.6,1.6,w+.8),0x7a93a3,-.3,0);M(new THREE.CylinderGeometry(.18,.18,3.2),0x7a93a3,-.3,-2.4);
+ M(new THREE.CylinderGeometry(.07,.07,1.2),0xe2461a,Lv,-drop+t/2+1);M(new THREE.ConeGeometry(.22,.45,16),0xe2461a,Lv,-drop+t/2+.3).rotation.x=Math.PI;
+ M(new THREE.CylinderGeometry(.2,.2,1.4),0xc9d6d5,Lv,-drop-t/2-.7);
  dyn.position.x=-Lv/2;ren.render(sc,cam)}
 
 /* ---------- update ---------- */
@@ -194,12 +199,12 @@ function upd(){
  const c=cur(s),w=[];
  if(c.z>25)w.push("Beyond the 25 mm indicator range");if(s.W>60)w.push("Beyond the 60 N load-cell range");if(c.sig>s.m.y)w.push("Stress exceeds yield strength");
  $("stats").innerHTML=[["Free-end deflection z",f(c.z,4)+" mm"],["Slope m = z/W",f(c.m,4)+" mm/N"],["Stiffness k = W/z",f(c.k,4)+" N/mm"],["Max bending stress σ",f(c.sig,3)+" MPa"+(isFinite(c.SF)?" (SF "+f(c.SF,3)+")":"")],["Tip slope θ",f(c.th,3)+"°"],["Natural frequency f₁",f(c.f1,3)+" Hz"]].map(a=>`<div class="stat"><span>${a[0]}</span><b>${a[1]}</b></div>`).join("")+(w.length?`<div class="stat"><span>Warning</span><b class="warn">${w.join("; ")}</b></div>`:"");
- $("mp").innerHTML=`<tr><td>Material</td><td>${s.m.n}</td></tr><tr><td>Young’s modulus E</td><td>${f(s.m.E,4)} GPa</td></tr>`+($("mat").value==="steel"?`<tr><td>Reference E (TecQuipment)</td><td>${EREF} GPa (190–210)</td></tr>`:"")+`<tr><td>Yield strength σ<sub>y</sub></td><td>${s.m.y} MPa</td></tr><tr><td>Density ρ</td><td>${s.m.rho} kg/m³</td></tr><tr><td>Poisson’s ratio ν</td><td>${s.m.nu}</td></tr><tr><td>Second moment I</td><td>${f(c.ib,4)} m⁴</td></tr>`;
+ $("mp").innerHTML=`<tr><td>Material</td><td>${s.m.n}</td></tr><tr><td>Young’s modulus E</td><td>${f(s.m.E,4)} GPa</td></tr>`+`<tr><td>Reference E (TecQuipment)</td><td>${EREF} GPa (190–210)</td></tr>`+`<tr><td>Yield strength σ<sub>y</sub></td><td>${s.m.y} MPa</td></tr><tr><td>Density ρ</td><td>${s.m.rho} kg/m³</td></tr><tr><td>Poisson’s ratio ν</td><td>${s.m.nu}</td></tr><tr><td>Second moment I</td><td>${f(c.ib,4)} m⁴</td></tr>`;
  $("bar").innerHTML=bar(s.L,s.W,c.z);$("f1").innerHTML=fig1(s,c);$("f2").innerHTML=fig2(s,c);$("l1").innerHTML=leg1(s,c);$("l2").innerHTML=leg2(c);
  if(v3)up3(s,c.z);eqs(s,c);
 }
 
-function eqs(s,c){const Lm=s.L/1000,E=s.m.E*1e9,Elen=c.El*1e6,dv=$("mat").value==="steel"?f(100*Math.abs(c.El/1000-EREF)/EREF,3)+" % (for this length vs 210 GPa)":"compare with the 210 GPa steel reference";
+function eqs(s,c){const Lm=s.L/1000,E=s.m.E*1e9,Elen=c.El*1e6,dv=f(100*Math.abs(c.El/1000-EREF)/EREF,3)+" % (for this length vs 210 GPa)";
  const rows=[
  ["(1)",`I = ${fr("b d³","12")}`,"Second moment of area",`I = (${s.b})(${s.d})³/12 = ${f(c.ib*1e12,4)} mm⁴ = ${f(c.ib,4)} m⁴`],
  ["(2)",`z = ${fr("W ℓ³","3 E I")}`,"Free-end deflection",`z = (${s.W})(${f(Lm,4)})³ / (3·${f(Elen/1e9,4)}e9·${f(c.ib,4)}) = ${f(s.W*Lm**3/(3*Elen*c.ib)*1000,4)} mm`],
@@ -218,7 +223,7 @@ function eqs(s,c){const Lm=s.L/1000,E=s.m.E*1e9,Elen=c.El*1e6,dv=$("mat").value=
 /* ---------- setup ---------- */
 $("f2").innerHTML="";
 ["L","W","b","d"].forEach(i=>{const n=$(i),r=$(i+"r");r.oninput=()=>{n.value=r.value;upd()};n.oninput=()=>{r.value=n.value;upd()}});
-$("mat").onchange=upd;$("tbl").innerHTML=tbl();
+$("tbl").innerHTML=tbl();
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===b));$("sim").hidden=b.dataset.t!=="sim";$("eq").hidden=b.dataset.t!=="eq"});
 const show3=on=>{v3=on;$("bar").hidden=on;$("v3").hidden=!on;$("n3").hidden=!on;$("v2b").classList.toggle("on",!on);$("v3b").classList.toggle("on",on);if(on){init3();upd()}};
 $("v2b").onclick=()=>show3(false);$("v3b").onclick=()=>show3(true);
@@ -251,7 +256,7 @@ $("bReport").onclick=()=>{
 
 $("bSlide").onclick=()=>{
  const s=st(),c=cur(s);
- $("slide").innerHTML=`<h1>🎀 Cantilever Bending Test: Young’s Modulus of ${s.m.n}</h1>
+ $("slide").innerHTML=`<h1>Cantilever Bending Test: Young’s Modulus of ${s.m.n}</h1>
 <div>${bar(s.L,s.W,c.z)}</div><div>${fig1(s,c)}</div>
 <div class="big"><div><b>${f(EM/1000,4)} GPa</b><span>Mean E from z–W slopes (${f(DM,3)} % from ${EREF})</span></div><div><b>${f(Q.E/1000,4)} GPa</b><span>E from z–ℓ³ at 10 N (${f(DQ,3)} % from ${EREF})</span></div><div><b>${f(c.z,3)} mm</b><span>Deflection at ℓ = ${f(s.L,4)} mm, W = ${f(s.W,3)} N</span></div></div>`;
  view("slide")};
