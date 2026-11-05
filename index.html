@@ -7,93 +7,155 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
 <style>
 /* ===== COLOR SCHEME: edit these hex codes to recolor the page ===== */
-:root{--bg:#0e171d;--card:#15222b;--tint:#1b2b36;--tx:#eaf1f0;--mu:#9bb0b6;--bd:#2a3d49;--accent:#e06a18;--accent-d:#f39a50;--red:#f0592a;--yel:#fdd472;--teal:#7db4a6;--ring:#fdd472;--dial:#c9d6d5;
+:root{--bg:#f3efe6;--card:#fbf9f3;--tint:#ebe5d8;--hero:#e4ddd0;--tx:#25221d;--mu:#7a746a;--bd:#d8d2c0;--accent:#bd5d3c;--accent-d:#a64d2e;--red:#b5392b;--teal:#6f8279;--ring:#25221d;--dial:#3b3f3a;--ink:#111111;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}[hidden]{display:none!important}
-body{margin:0;color:var(--tx);font:17px/1.5 "Times New Roman",Times,serif;background:radial-gradient(1000px 480px at 88% -8%,rgba(224,106,24,.20),transparent 62%),radial-gradient(800px 460px at -8% 6%,rgba(125,180,166,.15),transparent 60%),#0e171d;background-attachment:fixed}
-main,.wrap{max-width:1060px;margin:0 auto;padding:22px 16px 48px}
-h1{font-size:2.1rem;font-weight:700;letter-spacing:.005em;margin:0;line-height:1.15;background:linear-gradient(90deg,#fdd472,#e06a18);-webkit-background-clip:text;background-clip:text;color:transparent}
-h2{font-size:1.05rem;font-weight:700;margin:0 0 10px;letter-spacing:.02em}
-.top{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:flex-end;padding:4px 0 18px}
-.top p{margin:4px 0 0;color:var(--mu);font-size:.95rem}
-button{font:inherit;font-weight:700;font-size:.92rem;color:var(--tx);background:var(--tint);border:1px solid var(--bd);border-radius:8px;padding:7px 15px;cursor:pointer}
-button:hover{border-color:var(--accent);color:var(--yel)}button:focus-visible,input:focus-visible{outline:3px solid var(--yel);outline-offset:1px}
+body{margin:0;background:var(--bg);color:var(--tx);font:18px/1.55 "Times New Roman",Times,serif}
+main,.wrap{max-width:1080px;margin:0 auto;padding:18px 18px 56px}
+.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding:6px 0 12px}.brand{font-weight:700;letter-spacing:.06em}.top span.m{color:var(--mu);font-size:.9rem}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--bd)}
+.tab{background:none;border:0;border-radius:7px;padding:7px 14px;font:inherit;font-weight:700;color:var(--mu);cursor:pointer}.tab:hover{color:var(--tx)}.tab.on{background:var(--ink);color:#fff}
+.eyebrow{color:var(--accent);font-weight:700;font-size:.82rem;letter-spacing:.09em;text-transform:uppercase;margin:44px 0 8px}
+.title{font-size:clamp(2.3rem,6vw,3.7rem);line-height:1.08;margin:0;font-weight:700;letter-spacing:-.01em}.title em{font-style:italic}
+.title2{font-size:clamp(1.9rem,4.5vw,2.8rem);line-height:1.1;margin:0;font-weight:700}
+.lede{color:var(--mu);font-size:1.15rem;max-width:62ch;margin:12px 0 26px}
+h2{font-size:1.15rem;font-weight:700;margin:0 0 10px}
+button{font:inherit;font-weight:700;font-size:.95rem;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:7px 15px;cursor:pointer}
+button:hover{border-color:var(--accent);color:var(--accent-d)}button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .btns,.vt{display:flex;gap:8px;flex-wrap:wrap}
-.tabs{display:flex;gap:4px;border-bottom:1px solid var(--bd)}
-.tab{border:0;border-radius:0;background:none;padding:10px 18px;color:var(--mu);border-bottom:3px solid transparent;margin-bottom:-1px;font-size:1rem}
-.tab.on{color:var(--yel);border-bottom-color:var(--accent)}.tab:hover{background:none}
-.chip{padding:4px 13px;font-size:.88rem;border-radius:6px}.chip.on{background:var(--accent);border-color:var(--accent);color:#10181e}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px;box-shadow:0 10px 28px rgba(0,0,0,.35)}
-.grid{display:grid;grid-template-columns:300px 1fr;gap:16px;margin-top:18px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.col{display:grid;gap:16px;align-content:start}
+.chip{padding:3px 13px;font-size:.9rem;border-radius:6px}.chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.homecta{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 30px}.homecta .solid{background:var(--ink);border-color:var(--ink);color:#fff}.homecta .solid:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.glance{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border-top:1px solid var(--bd);border-bottom:1px solid var(--bd)}
+.glance div{padding:14px 14px 14px 0}.glance span{display:block;font-size:.82rem;color:var(--mu)}.glance b{font-size:1.15rem}
+.navcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.navcard{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;padding:18px;background:var(--card);border:1px solid var(--bd);border-radius:12px;font-weight:400}
+.navcard i{font-style:normal;color:var(--accent);font-weight:700;font-size:.85rem;letter-spacing:.08em}.navcard b{font-size:1.35rem}.navcard span{color:var(--mu);font-size:.98rem;line-height:1.4}.navcard u{text-decoration:none;color:var(--accent);font-weight:700;font-size:.85rem;letter-spacing:.05em;text-transform:uppercase;margin-top:auto;padding-top:8px}
+.navcard:hover{border-color:var(--accent);transform:translateY(-2px)}
+.takeaway{margin-top:30px;padding:18px 20px;background:var(--hero);border-radius:12px;font-size:1.08rem}
+#p-sim .stats{grid-template-columns:1fr;gap:8px;margin-top:0}#p-sim .stat{padding:6px 12px}#p-sim .stat span{font-size:.82rem}#p-sim .stat b{font-size:1.08rem}
+#p-sim .card{padding:12px 14px}#p-sim .grid,#p-sim .col{gap:12px}#p-sim .grid2{gap:12px}#p-sim .grid2 h2{font-size:1rem;margin-bottom:4px}#f1 svg,#f2 svg{max-height:215px}#p-sim .leg{font-size:.8rem;margin-top:4px}#p-sim .row{margin-bottom:10px}
+
+.herobox{background:var(--hero);border-radius:14px;padding:18px 18px 46px;position:relative}.herobox .cap{position:absolute;left:30px;bottom:14px;letter-spacing:.32em;color:var(--mu);font-size:.95rem;text-transform:uppercase}
+.enter{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:14px;padding:10px 2px;background:none;border:0;border-radius:0;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;font-size:.92rem}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px}
+.grid{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.col{display:grid;gap:16px;align-content:start}
 @media(max-width:800px){.grid,.grid2{grid-template-columns:1fr}}
-.row{margin-bottom:14px}.row label{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:.92rem;color:var(--mu)}
-.row input[type=number]{width:86px;padding:3px 8px;font:inherit;color:var(--yel);background:var(--tint);border:1px solid var(--bd);border-radius:6px;text-align:right}
+.row{margin-bottom:14px}.row label{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:.95rem;color:var(--mu)}
+.row input[type=number]{width:88px;padding:3px 8px;font:inherit;color:var(--tx);background:var(--tint);border:1px solid var(--bd);border-radius:6px;text-align:right}
 input[type=range]{width:100%;accent-color:var(--accent);margin:3px 0 0}
 svg{display:block;width:100%;height:auto}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-top:16px}
-.stat{background:var(--card);border:1px solid var(--bd);border-left:3px solid var(--teal);border-radius:10px;padding:8px 12px}.stat span{display:block;font-size:.78rem;color:var(--mu);font-weight:700;text-transform:uppercase;letter-spacing:.05em}.stat b{font-size:1.15rem;color:var(--yel)}
-.warn,.stat b.warn{color:var(--red)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px;margin-top:16px}
+.stat{background:var(--card);border:1px solid var(--bd);border-left:3px solid var(--accent);border-radius:10px;padding:8px 12px}.stat span{display:block;font-size:.9rem;color:var(--mu);font-weight:700}.stat b{font-size:1.18rem}
+.warn{color:var(--red)}
 .gr{stroke:var(--bd);stroke-width:1}.ax{stroke:var(--mu);stroke-width:1.5}.tk{fill:var(--mu);font-size:10px}.al{fill:var(--tx);font-size:11px;font-weight:700}
 .t{fill:var(--tx);font-size:12px}.tm{fill:var(--mu);font-size:11px}.tb{font-weight:700;font-size:13px}
-.glow{filter:drop-shadow(0 0 6px rgba(224,106,24,.5))}.gl{filter:drop-shadow(0 0 4px rgba(224,106,24,.85))}
-.leg{list-style:none;margin:8px 0 0;padding:0;font-size:.86rem}.leg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;background:var(--accent)}.leg i.ring{background:rgba(253,212,114,.35);border:2px solid var(--ring);width:11px;height:11px}
-table{border-collapse:collapse;width:100%;font-size:.92rem}th,td{padding:5px 7px;border-bottom:1px solid var(--bd);text-align:right}th{color:var(--mu);font-weight:700}th:first-child,td:first-child{text-align:left}
-.mp td:last-child{font-weight:700;color:var(--yel)}
-#v3{height:320px;cursor:grab;border-radius:8px;background:var(--tint);position:relative}#v3 canvas{display:block;width:100%;border-radius:8px}
-.note{font-size:.86rem;color:var(--mu);margin:6px 0 0}
-details summary{cursor:pointer;font-weight:700}
-.eqr{display:grid;grid-template-columns:70px 1.1fr 1.3fr;gap:4px 14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--bd)}
+.leg{list-style:none;margin:8px 0 0;padding:0;font-size:.88rem}.leg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;background:var(--accent)}.leg i.ring{background:rgba(37,34,29,.12);border:2px solid var(--ring);width:11px;height:11px}
+table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{padding:5px 7px;border-bottom:1px solid var(--bd);text-align:right}th{color:var(--mu);font-weight:700}th:first-child,td:first-child{text-align:left}
+.mp td:last-child{font-weight:700}
+#v3{height:320px;cursor:grab;border-radius:8px;background:var(--hero);position:relative}#v3 canvas{display:block;width:100%;border-radius:8px}
+.note{font-size:.88rem;color:var(--mu);margin:6px 0 0}
+.eqr{display:grid;grid-template-columns:72px 1.1fr 1.3fr;gap:4px 14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--bd)}
 .eqr:last-child{border:0}@media(max-width:700px){.eqr{grid-template-columns:1fr}}
-.en{font-weight:700;color:var(--accent-d)}.ef{font-size:1.25rem}.ef small{display:block;font-size:.82rem;color:var(--mu)}.ev{font-size:.95rem;background:var(--tint);border-radius:6px;padding:5px 10px;color:var(--yel)}
+.en{font-weight:700;color:var(--accent)}.ef{font-size:1.25rem}.ef small{display:block;font-size:.84rem;color:var(--mu)}.ev{font-size:.95rem;background:var(--tint);border-radius:6px;padding:5px 10px}
 .fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 4px;line-height:1.25}.fr span:first-child{border-bottom:1.5px solid currentColor;padding:0 5px}
+.about ul,.about ol{margin:0;padding-left:1.2em}.about li{margin:3px 0}
 #reportWrap,#slideWrap{display:none}
 body[data-view=report] #app,body[data-view=slide] #app{display:none}
 body[data-view=report] #reportWrap,body[data-view=slide] #slideWrap{display:block}
 .bar2{display:flex;justify-content:space-between;gap:8px;max-width:780px;margin:0 auto 10px}
-.paper{background:#fff;color:#1b2a33;max-width:780px;margin:0 auto;padding:22px 26px;border-radius:8px;font-size:12px;line-height:1.35;--tx:#1b2a33;--mu:#5f7380;--bd:#dde6e4;--tint:#f2f7f6;--card:#fff;--ring:#1b2a33;--dial:#1b2a33;--yel:#1b2a33}
-.paper h1{font-size:19px;background:none;-webkit-background-clip:initial;background-clip:initial;color:#1b2a33}.paper h2{font-size:13px;margin:10px 0 3px;color:#b8500f}.paper table{font-size:11px}.paper p{margin:3px 0}.paper .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.paper .leg{font-size:9.5px}.paper .glow,.paper .gl{filter:none}.paper .leg i.ring{background:#fdd472}
+.paper{background:#fff;color:#25221d;max-width:780px;margin:0 auto;padding:22px 26px;border:1px solid var(--bd);border-radius:8px;font-size:12px;line-height:1.35;--tx:#25221d;--mu:#6b655b;--bd:#d8d2c0;--tint:#f4f0e6;--card:#fff}
+.paper h1{font-size:19px;margin:0}.paper h2{font-size:13px;margin:10px 0 3px;color:#a64d2e}.paper table{font-size:11px}.paper p{margin:3px 0}.paper .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.paper .leg{font-size:9.5px}
 .paper [contenteditable]{border-bottom:1px dashed #bbb;min-width:60px;display:inline-block}
-#slide{aspect-ratio:16/9;max-width:960px;margin:0 auto;border-radius:12px;padding:2.2% 3%;display:grid;grid-template-columns:1.15fr 1fr;grid-template-rows:auto 1fr auto;gap:8px 18px;--tx:#eaf1f0;--mu:#9bb0b6;--bd:#2a3d49;--tint:#1b2b36;--card:#15222b;--ring:#fdd472;--dial:#c9d6d5;--yel:#fdd472;color:#eaf1f0;background:radial-gradient(700px 300px at 90% 0,rgba(224,106,24,.25),transparent 65%),#0e171d;border:1px solid var(--bd);border-top:5px solid var(--accent)}
-#slide h1{grid-column:1/3;font-size:clamp(16px,2.8vw,30px)}#slide .leg{display:none}
-.big{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;grid-column:1/3}.big div{background:#15222b;border:1px solid #2a3d49;border-left:3px solid #7db4a6;border-radius:10px;padding:6px 12px;text-align:center}.big b{display:block;font-size:clamp(14px,2.4vw,26px);color:#fdd472}.big span{font-size:clamp(9px,1.2vw,14px);color:#9bb0b6}
-@media print{
-:root{--bg:#fff!important;--card:#fff!important;--tint:#f2f7f6!important;--tx:#1b2a33!important;--mu:#5f7380!important;--bd:#dde6e4!important;--ring:#1b2a33!important;--dial:#1b2a33!important;--accent-d:#b8500f!important;--red:#e2461a!important;--yel:#1b2a33!important}
-body{background:#fff!important;color:#1b2a33}h1{background:none;color:#1b2a33}.card,.stat{box-shadow:none}.glow,.gl{filter:none}
-.noprint{display:none!important}main,.wrap{padding:0}.paper{border:0;padding:0;max-width:none}#slide{max-width:none;border-radius:0;print-color-adjust:exact;-webkit-print-color-adjust:exact}#slideWrap{page:slide}@page slide{size:landscape;margin:.35in}@page{margin:.5in}}
+#slide{aspect-ratio:16/9;max-width:960px;margin:0 auto;border-radius:12px;padding:2.2% 3%;display:grid;grid-template-columns:1.15fr 1fr;grid-template-rows:auto 1fr auto;gap:8px 18px;color:#25221d;background:#f3efe6;border:1px solid var(--bd);border-top:6px solid var(--accent)}
+#slide h1{grid-column:1/3;font-size:clamp(16px,2.8vw,30px);margin:0}#slide .leg{display:none}
+.big{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;grid-column:1/3}.big div{background:#fbf9f3;border:1px solid #d8d2c0;border-left:3px solid #bd5d3c;border-radius:10px;padding:6px 12px;text-align:center}.big b{display:block;font-size:clamp(14px,2.4vw,26px);color:#a64d2e}.big span{font-size:clamp(9px,1.2vw,14px);color:#6b655b}
+@media print{.noprint{display:none!important}main,.wrap{padding:0}.paper{border:0;padding:0;max-width:none}#slide{max-width:none;border-radius:0;print-color-adjust:exact;-webkit-print-color-adjust:exact}#slideWrap{page:slide}@page slide{size:landscape;margin:.35in}@page{margin:.5in}}
 </style>
 </head>
 <body data-view="app">
 <main id="app">
-<header class="top"><div><h1>Cantilever Bending Test</h1><p>ME/CEE 2140 · Lab 3 (B) · SM1004 Beam Apparatus</p></div>
-<div class="btns noprint"><button id="bPrint">Print</button><button id="bReport">Student report</button><button id="bSlide">Slide</button></div></header>
-<div class="tabs noprint"><button class="tab on" data-t="sim">Simulator</button><button class="tab" data-t="eq">Equations</button></div>
+<header class="top noprint"><span class="brand">CANTILEVER / LAB 3B</span><span class="m">ME/CEE 2140 · SM1004 Beam Apparatus</span></header>
+<nav class="tabs noprint"><button class="tab on" data-p="home">Home</button><button class="tab" data-p="sim">Simulate</button><button class="tab" data-p="theory">Theory</button><button class="tab" data-p="results">Results</button><button class="tab" data-p="about">About</button></nav>
 
-<section id="sim">
+<section id="p-home" class="page">
+<p class="eyebrow">Isabella &amp; Marilyn · Deform Lab</p>
+<h1 class="title">Bending Test of<br><em>Cantilever Beams.</em></h1>
+<p class="lede">Welcome. This site is our write-up of ME/CEE 2140 Lab 3 (B): we clamped a mild-steel strip at one end, loaded the free end, and measured how far it bent. Explore the experiment, the equations behind it, and what we found.</p>
+<div class="homecta noprint"><button class="solid" data-go="sim">Try the simulator</button><button data-go="results">See our results</button></div>
+
+<div class="glance">
+<div><span>Material</span><b>Mild steel</b></div>
+<div><span>Reference E</span><b>210 GPa</b></div>
+<div><span>Apparatus</span><b>TecQuipment SM1004</b></div>
+</div>
+
+<p class="eyebrow" style="margin-top:44px">Explore</p>
+<div class="navcards noprint">
+<button class="navcard" data-go="sim"><i>02</i><b>Simulate</b><span>Slide the length, load and beam size and watch the beam bend, in 2D and 3D.</span><u>Open ↗</u></button>
+<button class="navcard" data-go="theory"><i>03</i><b>Theory</b><span>The twelve equations behind the lab, worked out with live numbers.</span><u>Open ↗</u></button>
+<button class="navcard" data-go="results"><i>04</i><b>Results</b><span>Regression table, Young’s modulus, and how close we came to 210 GPa.</span><u>Open ↗</u></button>
+<button class="navcard" data-go="about"><i>05</i><b>About</b><span>Objectives, apparatus, procedure and the main sources of error.</span><u>Open ↗</u></button>
+</div>
+
+<div class="takeaway"><p class="eyebrow" style="margin:0 0 6px">The short version</p>
+<p id="homeTake" style="margin:0"></p></div>
+</section>
+
+<section id="p-sim" class="page" hidden>
+<p class="eyebrow" style="margin:16px 0 12px">02 / Simulate <span style="text-transform:none;letter-spacing:0;color:var(--mu);font-weight:400;font-size:1rem">&mdash; drag the sliders and watch the beam and both figures update together.</span></p>
 <div class="grid">
-<div class="col">
+<div class="col stick">
 <div class="card noprint">
 <div class="row"><label for="L">Working length ℓ (mm) <input id="L" type="number" value="600" min="50" max="700" step="10"></label><input id="Lr" type="range" min="50" max="700" step="10" value="600"></div>
 <div class="row"><label for="W">Free-end load W (N) <input id="W" type="number" value="10" min="0" max="60" step="0.5"></label><input id="Wr" type="range" min="0" max="60" step="0.5" value="10"></div>
 <div class="row"><label for="b">Beam width b (mm) <input id="b" type="number" value="19" min="5" max="50" step="0.5"></label><input id="br" type="range" min="5" max="50" step="0.5" value="19"></div>
-<div class="row"><label for="d">Beam thickness d (mm) <input id="d" type="number" value="6.35" min="1" max="12" step="0.05"></label><input id="dr" type="range" min="1" max="12" step="0.05" value="6.35"></div>
+<div class="row" style="margin:0"><label for="d">Beam thickness d (mm) <input id="d" type="number" value="6.35" min="1" max="12" step="0.05"></label><input id="dr" type="range" min="1" max="12" step="0.05" value="6.35"></div>
+<p class="note" style="margin:12px 0 0">Our lab tested ℓ = 200–600 mm and W = 0–10 N. The sliders go further (up to 700 mm and the 60 N load-cell limit), and those values are calculated from the equations.</p>
 </div>
-<div class="card"><h2>Material properties</h2><table class="mp" id="mp"></table></div>
+<div class="stats" id="stats"></div>
 </div>
+<div class="col">
 <div class="card">
 <div class="vt noprint" style="margin-bottom:10px"><button class="chip on" id="v2b">Side view</button><button class="chip" id="v3b">3D view</button></div>
 <div id="bar"></div><div id="v3" hidden></div><p class="note noprint" id="n3" hidden>Drag to rotate the beam.</p>
 </div>
-</div>
-<div class="stats" id="stats"></div>
-<div class="grid2">
+<div class="grid2" style="margin-top:0">
 <div class="card"><h2>Figure 1 – Deflection Z vs load W</h2><div id="f1"></div><ul class="leg" id="l1"></ul></div>
 <div class="card"><h2>Figure 2 – Deflection Z vs ℓ³ (W = 10 N)</h2><div id="f2"></div><ul class="leg" id="l2"></ul></div>
 </div>
-<div class="card" style="margin-top:14px"><details><summary>Calculated parameters for all working lengths</summary><div id="tbl" style="margin-top:8px"></div></details></div>
+<div class="card"><h2>Material properties</h2><table class="mp mpT"></table></div>
+</div>
+</div>
 </section>
 
-<section id="eq" hidden><div class="card"><h2>Equations</h2><p class="note" style="margin:0 0 4px">Every value on the right updates with your current slider settings.</p><div id="eqs"></div></div></section>
+<section id="p-theory" class="page" hidden>
+<p class="eyebrow">03 / Theory</p>
+<h2 class="title2">The Equations.</h2>
+<p class="lede">Euler–Bernoulli beam theory for a cantilever with a point force at the free end. Every value on the right updates with your slider settings.</p>
+<div class="card"><div id="eqs"></div></div>
+</section>
+
+<section id="p-results" class="page" hidden>
+<p class="eyebrow">04 / Results</p>
+<h2 class="title2">What the Lab Found.</h2>
+<p class="lede">Regression results for the five working lengths and the fixed-load analysis, compared with the TecQuipment reference.</p>
+<div class="btns noprint" style="margin-bottom:16px"><button id="bPrint">Print</button><button id="bReport">Student report</button><button id="bSlide">Slide</button></div>
+<div class="card"><div id="tbl"></div></div>
+</section>
+
+<section id="p-about" class="page about" hidden>
+<p class="eyebrow">05 / About</p>
+<h2 class="title2">The Experiment.</h2>
+<p class="lede">ME/CEE 2140 Mechanics of Materials Laboratory · Lab 3 (B) · Bending Test of Cantilevers, using the TecQuipment SM1004 Beam Apparatus.</p>
+<div class="grid2" style="margin-top:0">
+<div class="card"><h2>Objectives</h2><ul><li>Verify that deflection z is proportional to load W at a fixed length.</li><li>Verify that z is proportional to ℓ³ at a fixed load.</li><li>Calculate the second moment of area I from the beam dimensions.</li><li>Find Young’s modulus E by regression and compare it with 210 GPa (actual range 190–210 GPa).</li><li>Judge data quality and name the main sources of deviation.</li></ul></div>
+<div class="card"><h2>Material and beam</h2><table class="mp mpT"></table></div>
+<div class="card"><h2>Apparatus</h2><ul><li>TecQuipment SM1004 beam apparatus</li><li>Cantilever support (rigid clamp)</li><li>Load cell, 0–60 N, 10 N/mm calibration</li><li>Digital deflection indicator, 0–25 mm, 0.01 mm resolution</li><li>Mild-steel rectangular strip</li><li>String / tie for the opposite overhang</li></ul></div>
+<div class="card"><h2>Procedure</h2><ol><li>Set ℓ = 200 mm, level the beam, zero the load cell and indicator.</li><li>Raise the load in 2 N steps to 10 N and record z at each load.</li><li>Unload slowly and record the residual zero offset.</li><li>Repeat for ℓ = 300, 400, 500 and 600 mm, re-zeroing each time.</li><li>Run regressions of z against W and of z against ℓ³ at 10 N.</li></ol></div>
+<div class="card" style="grid-column:1/-1"><h2>Sources of error</h2><ul><li>Beam thickness: I depends on d³, so small errors matter a lot.</li><li>Working length: deflection depends on ℓ³.</li><li>Clamp compliance or slip makes the beam seem less stiff.</li><li>Indicator contact force, load-cell zero and friction, and indicator alignment.</li><li>Residual curvature and self-weight changing the reference position.</li></ul></div>
+</div>
+</section>
 </main>
 <div id="reportWrap"><div class="wrap"><div class="bar2 noprint"><button class="back">← Back</button><button class="pr">Print / Save as PDF</button></div><article class="paper" id="report"></article></div></div>
 <div id="slideWrap"><div class="wrap"><div class="bar2 noprint"><button class="back">← Back</button><button class="pr">Print / Save as PDF</button></div><div id="slide"></div></div></div>
@@ -128,19 +190,19 @@ const nice=v=>{if(!(v>0))return 1;const p=10**Math.floor(Math.log10(v)),n=v/p;re
 const fr=(n,d)=>`<span class="fr"><span>${n}</span><span>${d}</span></span>`;
 
 function bar(L,W,z){
- const mix=t=>{const a=[224,106,24],b=[125,180,166];return`rgb(${a.map((v,i)=>Math.round(b[i]+(v-b[i])*t))})`};
+ const mix=t=>{const a=[189,93,60],b=[111,130,121];return`rgb(${a.map((v,i)=>Math.round(b[i]+(v-b[i])*t))})`};
  const y0=100,xc=150,ps=520/700,Lp=Math.max(30,Math.min(L,700)*ps),drop=z>0?14+76*(1-Math.exp(-z/5)):0,k=z>0?Math.round(drop/(z*ps)):0;
  const tx=xc+Lp,ty=y0+drop,end=tx>560?"end":"start",o=end==="end"?-14:14,st="stroke:var(--mu);fill:none";
- let s=`<svg viewBox="0 0 720 300" role="img" aria-label="Cantilever beam deflecting under load">`;
- s+=`<text class="tm" x="12" y="292">Drawing auto-scaled${k?" (deflection shown about "+k+"× larger)":""}</text>`;
+ let s=`<svg viewBox="0 0 720 272" role="img" aria-label="Cantilever beam deflecting under load">`;
+ s+=`<text class="tm" x="12" y="266">Drawing auto-scaled${k?" (deflection shown about "+k+"× larger)":""}</text>`;
  s+=`<path d="M90 ${y0}V${y0-55}M72 ${y0-55}H108" style="${st};stroke-width:2"/><text class="tm" x="90" y="${y0-62}" text-anchor="middle">string</text>`;
  s+=`<line x1="${xc}" y1="${y0}" x2="${tx}" y2="${y0}" style="stroke:var(--mu);stroke-dasharray:5 5"/><line x1="90" y1="${y0}" x2="${xc}" y2="${y0}" style="stroke:var(--teal);stroke-width:9"/>`;
  s+='<g class="glow">';const N=40,yy=x=>y0+drop*(3*x*x-x**3)/2;for(let i=0;i<N;i++){const a=i/N,b=(i+1)/N,t=1-(a+b)/2;
   s+=`<line x1="${xc+Lp*a}" y1="${yy(a)}" x2="${xc+Lp*b}" y2="${yy(b)}" stroke="${mix(t)}" stroke-width="9"/>`}s+="</g>";
- s+=`<rect x="${xc-12}" y="${y0-24}" width="24" height="48" rx="5" style="fill:#7a93a3"/><rect x="${xc-5}" y="${y0+24}" width="10" height="90" style="fill:#7a93a3"/><text class="tm" x="${xc}" y="${y0+128}" text-anchor="middle">clamp</text>`;
+ s+=`<rect x="${xc-12}" y="${y0-24}" width="24" height="48" rx="5" style="fill:#67655f"/><rect x="${xc-5}" y="${y0+24}" width="10" height="90" style="fill:#67655f"/><text class="tm" x="${xc}" y="${y0+128}" text-anchor="middle">clamp</text>`;
  s+=`<line x1="${tx}" y1="${ty+8}" x2="${tx}" y2="218" style="stroke:var(--dial);stroke-width:2"/><rect x="${tx-11}" y="218" width="22" height="40" rx="6" style="fill:var(--dial)"/><circle cx="${tx}" cy="238" r="7" style="fill:var(--card)"/>`;
  s+=`<text class="t tb" x="${tx+o}" y="232" text-anchor="${end}">z = ${f(z,3)} mm</text><text class="tm" x="${tx+o}" y="248" text-anchor="${end}">dial indicator</text>`;
- s+=`<line x1="${tx}" y1="${ty-58}" x2="${tx}" y2="${ty-14}" style="stroke:var(--red);stroke-width:3"/><path d="M${tx-7} ${ty-18}L${tx+7} ${ty-18}L${tx} ${ty-6}Z" style="fill:var(--red)"/><rect x="${tx-14}" y="${ty-71}" width="28" height="13" rx="4" style="fill:var(--red)"/>`;
+ s+=`<line x1="${tx}" y1="${ty-58}" x2="${tx}" y2="${ty-14}" style="stroke:var(--accent);stroke-width:3"/><path d="M${tx-7} ${ty-18}L${tx+7} ${ty-18}L${tx} ${ty-6}Z" style="fill:var(--accent)"/><rect x="${tx-14}" y="${ty-71}" width="28" height="13" rx="4" style="fill:var(--accent)"/>`;
  s+=`<text class="t tb" x="${tx+o}" y="${ty-48}" text-anchor="${end}">W = ${f(W,3)} N</text>`;
  s+=`<path d="M${xc} 10V22M${tx} 10V22M${xc} 16H${tx}" style="${st}"/><text class="t" x="${(xc+tx)/2}" y="32" text-anchor="middle">ℓ = ${f(L,4)} mm</text></svg>`;
  return s}
@@ -152,7 +214,7 @@ function chart(o){const w=380,h=270,l=54,r=14,t=12,b=44,pw=w-l-r,ph=h-t-b,X=v=>l
  let x2=o.xm,y2=o.c+o.m*x2;if(y2>o.ym){x2=(o.ym-o.c)/o.m;y2=o.ym}
  s+=`<line class="gl" x1="${X(0)}" y1="${Y(o.c)}" x2="${X(x2)}" y2="${Y(y2)}" style="stroke:var(--accent);stroke-width:2"/>`;
  o.pts.forEach(p=>s+=`<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="3.8" style="fill:var(--accent)"/>`);
- if(o.hi&&o.hi[0]<=o.xm&&o.hi[1]<=o.ym)s+=`<circle cx="${X(o.hi[0])}" cy="${Y(o.hi[1])}" r="8" style="fill:rgba(253,212,114,.25);stroke:var(--ring);stroke-width:2.5"/><text x="${X(o.hi[0])+(X(o.hi[0])>w-80?-12:12)}" y="${Y(o.hi[1])-10}" text-anchor="${X(o.hi[0])>w-80?"end":"start"}" style="fill:var(--ring);font-size:11px;font-weight:800">current</text>`;
+ if(o.hi&&o.hi[0]<=o.xm&&o.hi[1]<=o.ym)s+=`<circle cx="${X(o.hi[0])}" cy="${Y(o.hi[1])}" r="8" style="fill:rgba(37,34,29,.10);stroke:var(--ring);stroke-width:2.5"/><text x="${X(o.hi[0])+(X(o.hi[0])>w-80?-12:12)}" y="${Y(o.hi[1])-10}" text-anchor="${X(o.hi[0])>w-80?"end":"start"}" style="fill:var(--ring);font-size:11px;font-weight:800">current</text>`;
  s+=`<text class="al" x="${l+pw/2}" y="${h-6}" text-anchor="middle">${o.xl}</text><text class="al" transform="translate(13 ${t+ph/2}) rotate(-90)" text-anchor="middle">${o.yl}</text></svg>`;return s}
 
 function fig1(s,c){const xm=nice(Math.max(10,s.W)),ym=nice(Math.max(c.r.c+c.r.m*xm,c.z,.01)*1.02);
@@ -174,7 +236,7 @@ function init3(){const el=$("v3");if(G)return;if(!window.THREE){el.textContent="
  ren.setPixelRatio(Math.min(2,devicePixelRatio));el.appendChild(ren.domElement);sc.add(root);root.add(dyn);
  sc.add(new THREE.AmbientLight(0xffffff,.9));const dl=new THREE.DirectionalLight(0xffffff,.7);dl.position.set(6,10,8);sc.add(dl);
  cam.position.set(0,3,17);cam.lookAt(0,-1,0);root.rotation.set(.2,-.6,0);
- const grid=new THREE.GridHelper(16,16,0x34505f,0x22384a);grid.position.y=-4.2;root.add(grid);
+ const grid=new THREE.GridHelper(16,16,0xc9c2b0,0xd9d2c1);grid.position.y=-4.2;root.add(grid);
  G={sc,cam,ren,root,dyn};
  const c=ren.domElement;c.style.touchAction="none";let dn=false,px=0,py=0;
  c.onpointerdown=e=>{dn=true;px=e.clientX;py=e.clientY;c.setPointerCapture(e.pointerId)};c.onpointerup=()=>dn=false;
@@ -182,14 +244,14 @@ function init3(){const el=$("v3");if(G)return;if(!window.THREE){el.textContent="
  new ResizeObserver(()=>{const w=el.clientWidth;if(!w)return;ren.setSize(w,320);cam.aspect=w/320;cam.updateProjectionMatrix();ren.render(sc,cam)}).observe(el)}
 function up3(s,z){if(!G)return;const{dyn,ren,sc,cam}=G;while(dyn.children.length)dyn.remove(dyn.children[0]);
  const Lv=Math.min(s.L,700)/700*10,t=Math.max(.1,s.d*.0571),w=Math.max(.2,s.b*.0429),drop=z>0?(14+76*(1-Math.exp(-z/5)))/90*3.2:0;
- const geo=new THREE.BoxGeometry(Lv,t,w,40,1,1),pos=geo.attributes.position,col=new Float32Array(pos.count*3),c1=new THREE.Color(0xe06a18),c2=new THREE.Color(0x7db4a6),tmp=new THREE.Color();
+ const geo=new THREE.BoxGeometry(Lv,t,w,40,1,1),pos=geo.attributes.position,col=new Float32Array(pos.count*3),c1=new THREE.Color(0xbd5d3c),c2=new THREE.Color(0x6f8279),tmp=new THREE.Color();
  for(let i=0;i<pos.count;i++){const a=(pos.getX(i)+Lv/2)/Lv;pos.setY(i,pos.getY(i)-drop*(3*a*a-a**3)/2);tmp.copy(c2).lerp(c1,1-a);col.set([tmp.r,tmp.g,tmp.b],i*3)}
  geo.setAttribute("color",new THREE.BufferAttribute(col,3));geo.computeVertexNormals();
  const mesh=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({vertexColors:true,roughness:.55}));mesh.position.x=Lv/2;dyn.add(mesh);
  const M=(g,c,x,y)=>{const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:c,roughness:.6}));m.position.set(x,y,0);dyn.add(m);return m};
- M(new THREE.BoxGeometry(.6,1.6,w+.8),0x7a93a3,-.3,0);M(new THREE.CylinderGeometry(.18,.18,3.2),0x7a93a3,-.3,-2.4);
- M(new THREE.CylinderGeometry(.07,.07,1.2),0xe2461a,Lv,-drop+t/2+1);M(new THREE.ConeGeometry(.22,.45,16),0xe2461a,Lv,-drop+t/2+.3).rotation.x=Math.PI;
- M(new THREE.CylinderGeometry(.2,.2,1.4),0xc9d6d5,Lv,-drop-t/2-.7);
+ M(new THREE.BoxGeometry(.6,1.6,w+.8),0x67655f,-.3,0);M(new THREE.CylinderGeometry(.18,.18,3.2),0x67655f,-.3,-2.4);
+ M(new THREE.CylinderGeometry(.07,.07,1.2),0xbd5d3c,Lv,-drop+t/2+1);M(new THREE.ConeGeometry(.22,.45,16),0xbd5d3c,Lv,-drop+t/2+.3).rotation.x=Math.PI;
+ M(new THREE.CylinderGeometry(.2,.2,1.4),0x3b3f3a,Lv,-drop-t/2-.7);
  dyn.position.x=-Lv/2;ren.render(sc,cam)}
 
 /* ---------- update ---------- */
@@ -199,7 +261,8 @@ function upd(){
  const c=cur(s),w=[];
  if(c.z>25)w.push("Beyond the 25 mm indicator range");if(s.W>60)w.push("Beyond the 60 N load-cell range");if(c.sig>s.m.y)w.push("Stress exceeds yield strength");
  $("stats").innerHTML=[["Free-end deflection z",f(c.z,4)+" mm"],["Slope m = z/W",f(c.m,4)+" mm/N"],["Stiffness k = W/z",f(c.k,4)+" N/mm"],["Max bending stress σ",f(c.sig,3)+" MPa"+(isFinite(c.SF)?" (SF "+f(c.SF,3)+")":"")],["Tip slope θ",f(c.th,3)+"°"],["Natural frequency f₁",f(c.f1,3)+" Hz"]].map(a=>`<div class="stat"><span>${a[0]}</span><b>${a[1]}</b></div>`).join("")+(w.length?`<div class="stat"><span>Warning</span><b class="warn">${w.join("; ")}</b></div>`:"");
- $("mp").innerHTML=`<tr><td>Material</td><td>${s.m.n}</td></tr><tr><td>Young’s modulus E</td><td>${f(s.m.E,4)} GPa</td></tr>`+`<tr><td>Reference E (TecQuipment)</td><td>${EREF} GPa (190–210)</td></tr>`+`<tr><td>Yield strength σ<sub>y</sub></td><td>${s.m.y} MPa</td></tr><tr><td>Density ρ</td><td>${s.m.rho} kg/m³</td></tr><tr><td>Poisson’s ratio ν</td><td>${s.m.nu}</td></tr><tr><td>Second moment I</td><td>${f(c.ib,4)} m⁴</td></tr>`;
+ const mpH=`<tr><td>Material</td><td>${s.m.n}</td></tr><tr><td>Young’s modulus E</td><td>${f(s.m.E,4)} GPa</td></tr>`+`<tr><td>Reference E (TecQuipment)</td><td>${EREF} GPa (190–210)</td></tr>`+`<tr><td>Yield strength σ<sub>y</sub></td><td>${s.m.y} MPa</td></tr><tr><td>Density ρ</td><td>${s.m.rho} kg/m³</td></tr><tr><td>Poisson’s ratio ν</td><td>${s.m.nu}</td></tr><tr><td>Second moment I</td><td>${f(c.ib,4)} m⁴</td></tr>`;
+ document.querySelectorAll(".mpT").forEach(e=>e.innerHTML=mpH);
  $("bar").innerHTML=bar(s.L,s.W,c.z);$("f1").innerHTML=fig1(s,c);$("f2").innerHTML=fig2(s,c);$("l1").innerHTML=leg1(s,c);$("l2").innerHTML=leg2(c);
  if(v3)up3(s,c.z);eqs(s,c);
 }
@@ -224,7 +287,10 @@ function eqs(s,c){const Lm=s.L/1000,E=s.m.E*1e9,Elen=c.El*1e6,dv=f(100*Math.abs(
 $("f2").innerHTML="";
 ["L","W","b","d"].forEach(i=>{const n=$(i),r=$(i+"r");r.oninput=()=>{n.value=r.value;upd()};n.oninput=()=>{r.value=n.value;upd()}});
 $("tbl").innerHTML=tbl();
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===b));$("sim").hidden=b.dataset.t!=="sim";$("eq").hidden=b.dataset.t!=="eq"});
+const go=p=>{document.querySelectorAll(".page").forEach(e=>e.hidden=e.id!=="p-"+p);document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.p===p));window.scrollTo(0,0)};
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>go(b.dataset.p));
+document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
+$("homeTake").textContent=`Across five working lengths, our z–W regressions gave a mean Young’s modulus of ${f(EM/1000,4)} GPa, and the z–ℓ³ fit gave ${f(Q.E/1000,4)} GPa. Both are within ${f(Math.max(DM,DQ),2)} % of the 210 GPa TecQuipment reference, and the deflection scaled with ℓ³ as theory predicts.`;
 const show3=on=>{v3=on;$("bar").hidden=on;$("v3").hidden=!on;$("n3").hidden=!on;$("v2b").classList.toggle("on",!on);$("v3b").classList.toggle("on",on);if(on){init3();upd()}};
 $("v2b").onclick=()=>show3(false);$("v3b").onclick=()=>show3(true);
 upd();
