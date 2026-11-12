@@ -125,6 +125,8 @@ body[data-view=report] #reportWrap,body[data-view=slide] #slideWrap{display:bloc
 <div class="row"><label for="b">Beam width b (mm) <input id="b" type="number" value="19" min="5" max="50" step="0.5"></label><input id="br" type="range" min="5" max="50" step="0.5" value="19"></div>
 <div class="row" style="margin:0"><label for="d">Beam thickness d (mm) <input id="d" type="number" value="6.35" min="1" max="12" step="0.05"></label><input id="dr" type="range" min="1" max="12" step="0.05" value="6.35"></div>
 <p class="note" style="margin:12px 0 0">Our lab tested ℓ = 200–600 mm and W = 0–10 N. The sliders go further (up to 700 mm and the 60 N load-cell limit), and those values are calculated from the equations.</p>
+<p class="note" style="margin:12px 0 6px"><b>Export this simulation</b></p>
+<div class="btns" style="gap:6px;flex-wrap:nowrap"><button style="padding:6px 11px" id="sPrint">Print</button><button style="padding:6px 11px" id="sReport">Student report</button><button style="padding:6px 11px" id="sSlide">Slide</button></div>
 </div>
 <div class="stats" id="stats"></div>
 </div>
@@ -371,11 +373,11 @@ renderLab();
 
 /* ---------- buttons ---------- */
 const view=v=>{document.body.dataset.view=v;window.scrollTo(0,0)};
-$("bPrint").onclick=()=>window.print();
+$("bPrint").onclick=()=>window.print();$("sPrint").onclick=()=>window.print();
 document.querySelectorAll(".back").forEach(b=>b.onclick=()=>view("app"));
 document.querySelectorAll(".pr").forEach(b=>b.onclick=()=>window.print());
 
-$("bReport").onclick=()=>{
+$("sReport").onclick=$("bReport").onclick=()=>{
  const s=st(),c=cur(s),r6=R[600],r3=R[300],inR=EM/1000>=190&&EM/1000<=210,m=s.m;
  const raw=`<table><tr><th>W (N)</th><th>z at ℓ = ${f(s.L,4)} mm</th></tr>`+c.pts.map(p=>`<tr><td>${p[0]}</td><td>${f(p[1],3)}</td></tr>`).join("")+`</table>`;
  $("report").innerHTML=`<h1>Bending Test of Cantilevers – Data and Results</h1>
@@ -394,7 +396,7 @@ $("bReport").onclick=()=>{
 • The smallest R² is ${f(Math.min(...LS.map(l=>R[l].r2)),5)} (z–W) and ${f(Q.r2,5)} (z–ℓ³).</p>`;
  view("report")};
 
-$("bSlide").onclick=()=>{
+$("sSlide").onclick=$("bSlide").onclick=()=>{
  const s=st(),c=cur(s);
  $("slide").innerHTML=`<h1>Cantilever Bending Test: Young’s Modulus of ${s.m.n}</h1>
 <div>${bar(s.L,s.W,c.z)}</div><div>${fig1(s,c)}</div>
