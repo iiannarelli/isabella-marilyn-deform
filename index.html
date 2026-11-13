@@ -56,6 +56,8 @@ button.solid{background:var(--ink);border-color:var(--ink);color:#fff}button.sol
 .alrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-weight:700;font-size:.95rem;margin-top:10px}
 select{font:inherit;font-size:.95rem;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;background:var(--card);color:var(--tx);max-width:100%}
 .dimIn{width:80px;padding:2px 6px;font:inherit;background:var(--tint);border:1px solid var(--bd);border-radius:6px;text-align:right}
+.aprog{height:4px;background:var(--tint);border-radius:2px;margin-top:6px;overflow:hidden}.aprog u{display:block;height:100%;width:0;background:var(--accent)}
+#p-anim .stats{grid-template-columns:1fr;gap:8px;margin-top:0}#p-anim .stat{padding:5px 12px}#p-anim .stat b{font-size:1.05rem}#p-anim .card{padding:12px 14px}#p-anim .grid,#p-anim .col,#p-anim .grid2{gap:12px}
 .herobox{background:var(--hero);border-radius:14px;padding:18px 18px 46px;position:relative}.herobox .cap{position:absolute;left:30px;bottom:14px;letter-spacing:.32em;color:var(--mu);font-size:.95rem;text-transform:uppercase}
 .enter{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:14px;padding:10px 2px;background:none;border:0;border-radius:0;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;font-size:.92rem}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px}
@@ -96,7 +98,7 @@ body[data-view=report] #reportWrap,body[data-view=slide] #slideWrap{display:bloc
 <body data-view="app">
 <main id="app">
 <header class="top noprint"><span class="brand">CANTILEVER / LAB 3B</span><span class="m">ME/CEE 2140 · SM1004 Beam Apparatus <button class="solid upb" id="upBtn">Upload data</button></span><input type="file" id="upFile" accept=".xlsx,.xlsm,.csv,.txt,.xls" hidden></header>
-<nav class="tabs noprint"><button class="tab on" data-p="home">Home</button><button class="tab" data-p="sim">Simulate</button><button class="tab" data-p="lab">Lab Data</button><button class="tab" data-p="theory">Theory</button><button class="tab" data-p="results">Results</button><button class="tab" data-p="about">About</button></nav>
+<nav class="tabs noprint"><button class="tab on" data-p="home">Home</button><button class="tab" data-p="sim">Simulate</button><button class="tab" data-p="lab">Lab Data</button><button class="tab" data-p="anim">Animation</button><button class="tab" data-p="theory">Theory</button><button class="tab" data-p="results">Results</button><button class="tab" data-p="about">About</button></nav>
 
 <section id="p-home" class="page">
 <p class="eyebrow">Isabella &amp; Marilyn · Deform Lab</p>
@@ -115,9 +117,10 @@ body[data-view=report] #reportWrap,body[data-view=slide] #slideWrap{display:bloc
 <div class="navcards noprint">
 <button class="navcard" data-go="sim"><i>02</i><b>Simulate</b><span>Slide the length, load and beam size and watch the beam bend, in 2D and 3D.</span><u>Open ↗</u></button>
 <button class="navcard" data-go="lab"><i>03</i><b>Lab Data</b><span>Every reading we recorded, the beam inputs, and the calculations, with the beam drawn for each one.</span><u>Open ↗</u></button>
-<button class="navcard" data-go="theory"><i>04</i><b>Theory</b><span>The twelve equations behind the lab, worked out with live numbers.</span><u>Open ↗</u></button>
-<button class="navcard" data-go="results"><i>05</i><b>Results</b><span>Regression table, Young’s modulus, and how close we came to the reference E.</span><u>Open ↗</u></button>
-<button class="navcard" data-go="about"><i>06</i><b>About</b><span>Objectives, apparatus, procedure and the main sources of error.</span><u>Open ↗</u></button>
+<button class="navcard" data-go="anim"><i>04</i><b>Animation</b><span>Watch the load push the beam up and release it, and save the motion as a GIF.</span><u>Open ↗</u></button>
+<button class="navcard" data-go="theory"><i>05</i><b>Theory</b><span>The twelve equations behind the lab, worked out with live numbers.</span><u>Open ↗</u></button>
+<button class="navcard" data-go="results"><i>06</i><b>Results</b><span>Regression table, Young’s modulus, and how close we came to the reference E.</span><u>Open ↗</u></button>
+<button class="navcard" data-go="about"><i>07</i><b>About</b><span>Objectives, apparatus, procedure and the main sources of error.</span><u>Open ↗</u></button>
 </div>
 
 <div class="takeaway"><p class="eyebrow" style="margin:0 0 6px">The short version</p>
@@ -185,15 +188,40 @@ body[data-view=report] #reportWrap,body[data-view=slide] #slideWrap{display:bloc
 <div class="card" style="margin-top:16px"><h2>Calculated parameters</h2><div class="tscroll" id="labCalc"></div></div>
 </section>
 
+<section id="p-anim" class="page" hidden>
+<p class="eyebrow" style="margin:16px 0 12px">04 / Animation <span class="sub">&mdash; the load pushes the free end up to the Simulate setting, holds, and releases.</span></p>
+<div class="grid">
+<div class="col">
+<div class="card noprint"><h2>Controls</h2>
+<div class="btns"><button class="solid" id="aPlay">Pause</button><button id="aRestart">Restart</button></div>
+<p class="note" style="margin:12px 0 2px">Speed</p><div class="chips" id="aSpeed"><button class="chip" data-v="0.5">Slow</button><button class="chip on" data-v="1">Normal</button><button class="chip" data-v="2">Fast</button></div>
+<p class="note" style="margin:0 0 2px">Motion</p><div class="chips" id="aMode"><button class="chip on" data-v="cycle">Load and release</button><button class="chip" data-v="load">Load only</button></div>
+<p class="note" id="aSet" style="margin:0"></p>
+<button data-go="sim" style="margin-top:10px">Change settings in Simulate</button>
+</div>
+<div class="card noprint"><h2>Download</h2><p class="note" style="margin:0 0 10px">Saves one loop of this animation as an animated GIF (about 3 seconds, repeats forever).</p>
+<button class="solid" id="aGif">Download GIF</button><p class="note" id="aGifMsg"></p>
+<img id="aGifImg" alt="Animated GIF of the cantilever" hidden style="width:100%;margin-top:8px;border-radius:8px;border:1px solid var(--bd)"></div>
+</div>
+<div class="col">
+<div class="card"><div class="vt" style="margin-bottom:6px;align-items:baseline"><b id="aNow"></b><span class="zread" id="aZ"></span></div><div id="aBar"></div><div class="aprog"><u id="aProg"></u></div></div>
+<div class="grid2" style="margin-top:0">
+<div class="card"><h2>Deflection z vs load W</h2><div id="aF1"></div></div>
+<div class="card"><h2>Right now</h2><div class="stats" id="aStats"></div></div>
+</div>
+</div>
+</div>
+</section>
+
 <section id="p-theory" class="page" hidden>
-<p class="eyebrow">04 / Theory</p>
+<p class="eyebrow">05 / Theory</p>
 <h2 class="title2">The Equations.</h2>
 <p class="lede">Euler–Bernoulli beam theory for a cantilever with a point force at the free end. Every value on the right updates with your slider settings.</p>
 <div class="card"><div id="eqs"></div></div>
 </section>
 
 <section id="p-results" class="page" hidden>
-<p class="eyebrow">05 / Results</p>
+<p class="eyebrow">06 / Results</p>
 <h2 class="title2">What the Lab Found.</h2>
 <p class="lede" id="resLede">Regression results for the five working lengths and the fixed-load analysis, compared with the TecQuipment reference.</p>
 <div class="btns noprint" style="margin-bottom:16px"><button id="bPrint">Print</button><button id="bReport">Student report</button><button id="bSlide">Slide</button></div>
@@ -201,7 +229,7 @@ body[data-view=report] #reportWrap,body[data-view=slide] #slideWrap{display:bloc
 </section>
 
 <section id="p-about" class="page about" hidden>
-<p class="eyebrow">06 / About</p>
+<p class="eyebrow">07 / About</p>
 <h2 class="title2">The Experiment.</h2>
 <p class="lede">ME/CEE 2140 Mechanics of Materials Laboratory · Lab 3 (B) · Bending Test of Cantilevers, using the TecQuipment SM1004 Beam Apparatus.</p>
 <div class="grid2" style="margin-top:0">
@@ -297,9 +325,9 @@ const refTag=()=>DS.builtin?"TecQuipment":DS.ref?"from your file":"handbook";
 const refName=()=>DS.builtin?"TecQuipment reference":DS.ref?"reference value in your file":"handbook value for "+MAT.n;
 const fr=(n,d)=>`<span class="fr"><span>${n}</span><span>${d}</span></span>`;
 
-function bar(L,W,z){
+function bar(L,W,z,zref){
  const mix=t=>{const a=[189,93,60],b=[111,130,121];return`rgb(${a.map((v,i)=>Math.round(b[i]+(v-b[i])*t))})`};
- const y0=190,xc=150,ps=490/LMAX,Lp=Math.max(30,Math.min(L,LMAX)*ps),drop=z>0?14+76*(1-Math.exp(-z/5)):0,k=z>0?Math.round(drop/(z*ps)):0;
+ const y0=190,xc=150,ps=490/LMAX,Lp=Math.max(30,Math.min(L,LMAX)*ps),zr=zref||z,dr=zr>0?14+76*(1-Math.exp(-zr/5)):0,drop=zr>0?dr*z/zr:0,k=zr>0?Math.round(dr/(zr*ps)):0;
  const tx=xc+Lp,ty=y0-drop,end=tx>560?"end":"start",o=end==="end"?-16:16,st="stroke:var(--mu);fill:none";
  let s=`<svg viewBox="0 0 720 340" role="img" aria-label="Cantilever beam deflecting upward under a load pushing up at the free end">`;
  s+=`<text class="tm" x="12" y="16">Drawing auto-scaled${k?" (deflection shown about "+k+"× larger)":""}</text>`;
@@ -308,16 +336,16 @@ function bar(L,W,z){
  s+='<g class="glow">';const N=40,yy=x=>y0-drop*(3*x*x-x**3)/2;for(let i=0;i<N;i++){const a=i/N,b=(i+1)/N,t=1-(a+b)/2;
   s+=`<line x1="${xc+Lp*a}" y1="${yy(a)}" x2="${xc+Lp*b}" y2="${yy(b)}" stroke="${mix(t)}" stroke-width="9"/>`}s+="</g>";
  s+=`<rect x="${xc-12}" y="${y0-24}" width="24" height="48" rx="5" style="fill:#67655f"/><rect x="${xc-5}" y="${y0+24}" width="10" height="66" style="fill:#67655f"/><text class="tm" x="${xc}" y="${y0+104}" text-anchor="middle">clamp</text>`;
- /* dial indicator above the tip */
- s+=`<line x1="${tx}" y1="${ty-8}" x2="${tx}" y2="64" style="stroke:var(--dial);stroke-width:2"/><rect x="${tx-11}" y="24" width="22" height="40" rx="6" style="fill:var(--dial)"/><circle cx="${tx}" cy="44" r="7" style="fill:var(--card)"/>`;
- s+=`<text class="t tb halo" x="${tx+o}" y="40" text-anchor="${end}">z = ${f(z,3)} mm</text><text class="tm" x="${tx+o}" y="56" text-anchor="${end}">dial indicator</text>`;
- /* load pushing up from below */
- s+=`<line x1="${tx}" y1="${ty+14}" x2="${tx}" y2="${ty+58}" style="stroke:var(--accent);stroke-width:3"/><path d="M${tx-7} ${ty+18}L${tx+7} ${ty+18}L${tx} ${ty+6}Z" style="fill:var(--accent)"/><rect x="${tx-14}" y="${ty+58}" width="28" height="13" rx="4" style="fill:var(--accent)"/>`;
- s+=`<text class="t tb halo" x="${tx+o}" y="${ty+44}" text-anchor="${end}">W = ${f(W,3)} N ↑</text>`;
  if(z>0){const xd=692;
   s+=`<path d="M${tx+10} ${y0}H${xd+8}M${tx} ${ty}H${xd+8}" style="stroke:var(--mu);stroke-width:1;stroke-dasharray:3 3;fill:none"/>`;
   s+=`<line x1="${xd}" y1="${y0-7}" x2="${xd}" y2="${ty+7}" style="stroke:var(--accent);stroke-width:1.6"/><path d="M${xd-4} ${y0-8}L${xd+4} ${y0-8}L${xd} ${y0}ZM${xd-4} ${ty+8}L${xd+4} ${ty+8}L${xd} ${ty}Z" style="fill:var(--accent)"/>`;
   s+=`<text class="t tb halo" transform="translate(${xd+19} ${(y0+ty)/2}) rotate(-90)" text-anchor="middle" style="fill:var(--accent)">z = ${f(z,3)} mm</text>`}
+ /* dial indicator rides on the tip */
+ s+=`<line x1="${tx}" y1="${ty-6}" x2="${tx}" y2="${ty-22}" style="stroke:var(--dial);stroke-width:2"/><rect x="${tx-11}" y="${ty-62}" width="22" height="40" rx="6" style="fill:var(--dial)"/><circle cx="${tx}" cy="${ty-42}" r="7" style="fill:var(--card)"/>`;
+ s+=`<text class="t tb halo" x="${tx+o}" y="${ty-46}" text-anchor="${end}">z = ${f(z,3)} mm</text><text class="tm" x="${tx+o}" y="${ty-30}" text-anchor="${end}">dial indicator</text>`;
+ /* load pushing up from below */
+ s+=`<line x1="${tx}" y1="${ty+14}" x2="${tx}" y2="${ty+58}" style="stroke:var(--accent);stroke-width:3"/><path d="M${tx-7} ${ty+18}L${tx+7} ${ty+18}L${tx} ${ty+6}Z" style="fill:var(--accent)"/><rect x="${tx-14}" y="${ty+58}" width="28" height="13" rx="4" style="fill:var(--accent)"/>`;
+ s+=`<text class="t tb halo" x="${tx+o}" y="${ty+44}" text-anchor="${end}">W = ${f(W,3)} N ↑</text>`;
  s+=`<path d="M${xc} 302V314M${tx} 302V314M${xc} 308H${tx}" style="${st}"/><text class="t" x="${(xc+tx)/2}" y="330" text-anchor="middle">ℓ = ${f(L,4)} mm</text></svg>`;
  return s}
 
@@ -401,7 +429,7 @@ function eqs(s,c){const Lm=s.L/1000,E=s.m.E*1e9,Elen=c.El*1e6,dv=f(100*Math.abs(
 /* ---------- setup ---------- */
 $("f2").innerHTML="";
 ["L","W","b","d"].forEach(i=>{const n=$(i),r=$(i+"r");r.oninput=()=>{n.value=r.value;upd()};n.oninput=()=>{r.value=n.value;upd()}});
-const go=p=>{document.querySelectorAll(".page").forEach(e=>e.hidden=e.id!=="p-"+p);document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.p===p));window.scrollTo(0,0)};
+const go=p=>{document.querySelectorAll(".page").forEach(e=>e.hidden=e.id!=="p-"+p);document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.p===p));window.scrollTo(0,0);if(p==="anim")aStart()};
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>go(b.dataset.p));
 document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
 const show3=on=>{v3=on;$("bar").hidden=on;$("v3").hidden=!on;$("n3").hidden=!on;$("v2b").classList.toggle("on",!on);$("v3b").classList.toggle("on",on);if(on){init3();upd()}};
@@ -620,9 +648,79 @@ $("resetBtn").onclick=()=>{LAB.alloy="mild";$("dsErr").innerHTML="";setData(LAB)
 ["upB","upD"].forEach(id=>$(id).onchange=()=>{const v=+$(id).value;if(!(v>0))return;DS[id==="upB"?"b":"d"]=v;DS.notes=(DS.notes||[]).filter(n=>!/^No beam/.test(n));setData(DS);refreshAll()});
 $("tplBtn").onclick=()=>{
  const csv="Length l (mm),Beam Thickness (mm),Beam Width (mm),Beam Material,Deflection Z (mm),Load W (N)\n"+LAB.rows.map(([L,W,Z])=>`${L},6.35,19,Steel,${Z},${W}`).join("\n")+"\n";
- const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="cantilever-data-template.csv";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)};
+ saveFile("cantilever-data-template.csv",new Blob([csv],{type:"text/csv"}))};
 renderDS();
 
+
+/* ---------- saving files (works on the preview page and on a normal website) ---------- */
+let DL=null;try{if(window.claude&&claude.use)claude.use("downloads").then(d=>DL=d).catch(()=>{})}catch(e){}
+async function saveFile(name,blob){
+ if(DL){try{await DL.save({filename:name,data:blob});return"saved"}catch(e){if(e&&e.code==="declined")return"declined";if(e&&e.code==="rate_limited")return"busy"}}
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);return"saved"}
+
+/* ---------- animation tab ---------- */
+let aRun=true,aSpd=1,aMode="cycle",aT=0,aLast=0,aRAF=0;
+const APER=3000,ease=x=>x<.5?2*x*x:1-(-2*x+2)**2/2;
+const aFrac=p=>aMode==="load"?(p<.7?ease(p/.7):1):(p<.4?ease(p/.4):p<.55?1:p<.95?1-ease((p-.55)/.4):0);
+function aState(p){const s=st(),Wt=s.W*aFrac(p);return{s,Wt,zt:zAt(s,s.L,Wt),zmax:zAt(s,s.L,s.W)}}
+function aDraw(p){
+ const{s,Wt,zt,zmax}=aState(p),c=cur(s);
+ if(!(s.W>0)){$("aBar").innerHTML=`<p class="note">Set a load above 0 N on the Simulate tab to animate the beam.</p>`;return}
+ $("aBar").innerHTML=bar(s.L,Wt,zt,zmax);
+ $("aNow").textContent=`W = ${Wt.toFixed(2)} N of ${f(s.W,3)} N`;$("aZ").innerHTML=`Deflection z <b>${zt.toFixed(3)} mm</b>`;
+ $("aProg").style.width=(p*100).toFixed(1)+"%";
+ $("aF1").innerHTML=chart({xm:nice(s.W),ym:nice(Math.max(zmax,.001)*1.05),c:c.r.c,m:c.r.m,pts:[],hi:[Wt,zt],hl:"now",al:"Deflection versus load during the animation",xl:"Load W [N]",yl:"Deflection Z [mm]"});
+ const sig=6*Wt*s.L/(s.b*s.d**2);
+ $("aStats").innerHTML=[["Load W",Wt.toFixed(2)+" N"],["Deflection z",zt.toFixed(3)+" mm"],["Bending stress σ",sig.toFixed(1)+" MPa"],["Tip slope θ",(1.5*zt/s.L*180/Math.PI).toFixed(3)+"°"],["Share of full load",Math.round(aFrac(p)*100)+" %"]].map(a=>`<div class="stat"><span>${a[0]}</span><b>${a[1]}</b></div>`).join("")}
+function aLoop(ts){if($("p-anim").hidden){aRAF=0;return}if(aRun&&aLast)aT=(aT+(ts-aLast)*aSpd/APER)%1;aLast=ts;aDraw(aT);aRAF=requestAnimationFrame(aLoop)}
+function aStart(){const s=st();$("aSet").innerHTML=`Using the Simulate settings: ℓ = ${f(s.L,4)} mm, W = ${f(s.W,3)} N, beam ${f(s.b,4)} × ${f(s.d,4)} mm, ${esc(MAT.n)}.`;aLast=0;if(!aRAF)aRAF=requestAnimationFrame(aLoop)}
+$("aPlay").onclick=()=>{aRun=!aRun;$("aPlay").textContent=aRun?"Pause":"Play"};
+$("aRestart").onclick=()=>{aT=0;aLast=0};
+[["aSpeed",v=>aSpd=+v],["aMode",v=>{aMode=v;aT=0}]].forEach(([id,fn])=>[...$(id).children].forEach(b=>b.onclick=()=>{[...$(id).children].forEach(x=>x.classList.toggle("on",x===b));fn(b.dataset.v)}));
+
+/* ---------- GIF export (built in the browser, no libraries) ---------- */
+function svgToImage(svg){
+ const cs=getComputedStyle(document.documentElement),v=n=>cs.getPropertyValue(n).trim();
+ svg=svg.replace(/var\(--([\w-]+)\)/g,(m,n)=>v("--"+n)).replace("<svg ",`<svg xmlns="http://www.w3.org/2000/svg" width="720" height="340" `)
+  .replace(/(<svg[^>]*>)/,`$1<style>text{font-family:"Times New Roman",Times,serif}.t{fill:${v("--tx")};font-size:12px}.tm{fill:${v("--mu")};font-size:11px}.tb{font-weight:700;font-size:13px}.halo{paint-order:stroke;stroke:${v("--card")};stroke-width:4px;stroke-linejoin:round}</style>`);
+ return new Promise((ok,no)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=()=>no(Error("Couldn't draw a frame."));im.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg)})}
+function gifLZW(px,out){
+ const clear=256,eoi=257,bytes=[];let size=9,next=258,dict=new Map(),buf=0,bits=0;
+ const emit=c=>{buf|=c<<bits;bits+=size;while(bits>=8){bytes.push(buf&255);buf>>>=8;bits-=8}};
+ emit(clear);let pre=px[0];
+ for(let i=1;i<px.length;i++){const k=px[i],key=pre<<8|k,hit=dict.get(key);if(hit!==undefined){pre=hit;continue}
+  emit(pre);if(next===4096){emit(clear);dict=new Map();next=258;size=9}else{if(next>=1<<size)size++;dict.set(key,next++)}pre=k}
+ emit(pre);emit(eoi);if(bits>0)bytes.push(buf&255);
+ out.push(8);for(let i=0;i<bytes.length;i+=255){const n=Math.min(255,bytes.length-i);out.push(n);for(let j=0;j<n;j++)out.push(bytes[i+j])}out.push(0)}
+async function makeGif(onProg){
+ const s=st();if(!(s.W>0))throw Error("Set a load above 0 N on the Simulate tab first.");
+ const N=48,Wd=720,Hd=384,cv=document.createElement("canvas");cv.width=Wd;cv.height=Hd;const g=cv.getContext("2d",{willReadFrequently:true});
+ const cs=getComputedStyle(document.documentElement),col=n=>cs.getPropertyValue(n).trim(),frames=[];
+ for(let i=0;i<N;i++){const p=i/N,{Wt,zt,zmax}=aState(p),im=await svgToImage(bar(s.L,Wt,zt,zmax));
+  g.fillStyle=col("--card");g.fillRect(0,0,Wd,Hd);g.fillStyle=col("--tx");g.font='bold 17px "Times New Roman",Times,serif';g.textBaseline="alphabetic";
+  g.fillText(`Cantilever, ${MAT.n}, ℓ = ${f(s.L,4)} mm`,14,27);g.textAlign="right";g.fillStyle=col("--accent-d");
+  g.fillText(`W = ${Wt.toFixed(2)} N ↑   z = ${zt.toFixed(3)} mm`,Wd-14,27);g.textAlign="left";
+  g.fillStyle=col("--accent");g.fillRect(0,Hd-4,Wd*p,4);
+  g.drawImage(im,0,38,720,340);frames.push(g.getImageData(0,0,Wd,Hd).data);onProg(.4*(i+1)/N);await new Promise(r=>setTimeout(r))}
+ /* palette: the 256 most common colours */
+ const cnt=new Map();for(let fi=0;fi<N;fi+=4){const d=frames[fi];for(let j=0;j<d.length;j+=4){const k=(d[j]>>3)<<10|(d[j+1]>>3)<<5|d[j+2]>>3,e=cnt.get(k);if(e){e[0]++;e[1]+=d[j];e[2]+=d[j+1];e[3]+=d[j+2]}else cnt.set(k,[1,d[j],d[j+1],d[j+2]])}}
+ const pal=[...cnt.values()].sort((a,b)=>b[0]-a[0]).slice(0,256).map(e=>[e[1]/e[0]|0,e[2]/e[0]|0,e[3]/e[0]|0]);while(pal.length<256)pal.push([0,0,0]);
+ const lut=new Int16Array(32768).fill(-1),idx=k=>{let v=lut[k];if(v>=0)return v;const r=(k>>10)<<3|4,gg=(k>>5&31)<<3|4,b=(k&31)<<3|4;let best=0,bd=1e9;
+  for(let i=0;i<256;i++){const q=pal[i],dd=(q[0]-r)**2+(q[1]-gg)**2+(q[2]-b)**2;if(dd<bd){bd=dd;best=i}}return lut[k]=best};
+ const out=[],B=b=>out.push(b&255),W16=v=>{B(v);B(v>>8)},S=t=>[...t].forEach(c=>B(c.charCodeAt(0)));
+ S("GIF89a");W16(Wd);W16(Hd);B(0xF7);B(0);B(0);pal.forEach(c=>{B(c[0]);B(c[1]);B(c[2])});
+ B(0x21);B(0xFF);B(11);S("NETSCAPE2.0");B(3);B(1);W16(0);B(0);
+ for(let i=0;i<N;i++){const d=frames[i],px=new Uint8Array(Wd*Hd);for(let j=0,q=0;j<d.length;j+=4,q++)px[q]=idx((d[j]>>3)<<10|(d[j+1]>>3)<<5|d[j+2]>>3);
+  B(0x21);B(0xF9);B(4);B(0);W16(6);B(0);B(0);B(0x2C);W16(0);W16(0);W16(Wd);W16(Hd);B(0);gifLZW(px,out);onProg(.4+.6*(i+1)/N);await new Promise(r=>setTimeout(r))}
+ B(0x3B);return new Blob([new Uint8Array(out)],{type:"image/gif"})}
+let aGifBusy=false;
+$("aGif").onclick=async()=>{if(aGifBusy)return;aGifBusy=true;const btn=$("aGif"),msg=$("aGifMsg");btn.disabled=true;
+ try{const blob=await makeGif(p=>msg.textContent=`Building GIF… ${Math.round(p*100)} %`);
+  const img=$("aGifImg");if(img.src)URL.revokeObjectURL(img.src);img.src=URL.createObjectURL(blob);img.hidden=false;
+  const r=await saveFile("cantilever-animation.gif",blob);
+  msg.textContent=r==="declined"?"Download cancelled. The GIF is shown below — you can also right-click it and choose “Save image as”.":`GIF ready (${(blob.size/1048576).toFixed(1)} MB). If it didn't download, right-click the preview and choose “Save image as”.`}
+ catch(e){msg.innerHTML=`<span class="warn">${esc(e.message||"Couldn't make the GIF.")}</span>`}
+ btn.disabled=false;aGifBusy=false};
 </script>
 </body>
 </html>
